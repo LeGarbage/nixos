@@ -2,34 +2,74 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      inputs.home-manager.nixosModules.default
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    inputs.home-manager.nixosModules.default
+  ];
 
-  # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.configurationLimit = 10;
+  boot = {
+    # Bootloader.
+    loader = {
+      efi.canTouchEfiVariables = true;
+      efi.efiSysMountPoint = "/boot";
+      grub = {
+        enable = true;
+        efiSupport = true;
+        device = "nodev";
+        configurationLimit = 10;
+        extraEntries = ''
+          menuentry "System shutdown" {
+              echo "System shutting down..."
+              halt
+          }
 
-  networking.hostName = "loganl"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+          if [ ''${grub_platform} == "efi" ]; then
+              menuentry 'UEFI Firmware Settings' --id 'uefi-firmware' {
+                  fwsetup
+              }
+          fi
+        '';
+      };
+    };
 
-  # Enable networking
-  networking.networkmanager.enable = true;
+    kernelPackages = pkgs.linuxPackages_latest;
+  };
+
+  networking = {
+
+    hostName = "loganl"; # Define your hostname.
+    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+    # Configure network proxy if necessary
+    # networking.proxy.default = "http://user:password@proxy:port/";
+    # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+    # Enable networking
+    networkmanager.enable = true;
+
+    # Open ports in the firewall.
+    # networking.firewall.allowedTCPPorts = [ ... ];
+    # networking.firewall.allowedUDPPorts = [ ... ];
+    # Or disable the firewall altogether.
+    firewall.enable = false;
+  };
 
   # Set your time zone.
   time.timeZone = "America/Denver";
 
   hardware.bluetooth.enable = true;
+
+  # powerManagement.powertop.enable = true;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -46,23 +86,42 @@
     LC_TIME = "en_US.UTF-8";
   };
 
+  stylix = {
+    enable = true;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/onedark.yaml";
+    polarity = "dark";
 
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
+    cursor = {
+      package = pkgs.simp1e-cursors;
+      name = "Simp1e-Dark";
+      size = 24;
+    };
+
+    fonts = {
+      monospace = {
+        package = pkgs.nerd-fonts.commit-mono;
+        name = "CommitMonoNerdFont";
+      };
+      serif = config.stylix.fonts.monospace;
+      sansSerif = config.stylix.fonts.monospace;
+      emoji = config.stylix.fonts.monospace;
+    };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.logan = {
     isNormalUser = true;
     description = "logan";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "power"
+    ];
   };
 
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
+    backupFileExtension = "bak";
     users = {
       "logan" = import ./home.nix;
     };
@@ -70,80 +129,151 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  # Use flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes"];
+  nix = {
+    settings = {
+      # Use flakes
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+    };
+    optimise = {
+      automatic = true;
+      dates = "weekly";
+    };
+    gc = {
+      automatic = true;
+      options = "--delete-older-than 14d";
+      dates = "weekly";
+    };
+  };
   # System maintanence
-  # system.autoUpgrade = {
-  #   enable = true;
-  #   flake = inputs.self.outPath;
-  #   flags = [ "-L" ];
-  # };
-  nix.gc = {
-    automatic = true;
-    options = "--delete-older-than 14d"
-    dates = "weekly"
+  system.autoUpgrade = {
+    enable = true;
+    flake = inputs.self.outPath;
+    flags = [ "-L" ];
+    dates = "weekly";
   };
 
-  environment.systemPackages = with pkgs; [
-    firefox
-    ghostty
-    git
-    stow
-    # Neovim stuff
-    wl-clipboard
-    yt-dlp
-    ripgrep
-    gcc
-    unzip
-    tree-sitter
-    gnumake
-  ];
-
-  programs.nix-ld = {
-    enable = true;
-    libraries = with pkgs; [
-      glibc
+  environment.systemPackages =
+    let
+      rofi = pkgs.rofi.override { plugins = [ pkgs.rofi-calc ]; };
+    in
+    with pkgs;
+    [
+      ghostty
+      git
+      stow
+      hyprpanel
+      yazi
+      neovide
+      rofi
+      brightnessctl
+      linux-wallpaperengine
+      acpid
+      socat
+      jq
+      wl-clipboard
+      nodejs
+      ffmpeg
+      yt-dlp
+      where-is-my-sddm-theme
     ];
+
+  programs = {
+    nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+        # Add any missing dynamic libraries for unpackaged programs
+        # here, NOT in environment.systemPackages
+        glibc
+      ];
+    };
+
+    hyprland.enable = true;
+    hyprlock.enable = true;
+
+    neovim = {
+      enable = true;
+      defaultEditor = true;
+    };
+
+    bash = {
+      enable = true;
+      blesh.enable = true;
+    };
+
+    steam.enable = true;
+
+    firefox.enable = true;
   };
 
-  programs.hyprland.enable = true;
+  services = {
+    hypridle.enable = true;
 
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    vimAlias = true;
+    upower.enable = true;
+    acpid.enable = true;
+
+    xserver.enable = true;
+
+    displayManager = {
+      enable = true;
+      # # Use ly as display manager
+      # ly = {
+      #   enable = true;
+      #   settings = {
+      #     animation = "matrix";
+      #     asterisk = "0x2022";
+      #     bigclock = "en";
+      #     clear_password = true;
+      #     clock = "%R %F";
+      #   };
+      # };
+      sddm = {
+        enable = true;
+        # wayland.enable = true;
+        theme = "${
+          pkgs.where-is-my-sddm-theme.override {
+            themeConfig.General = {
+              passwordCursorColor = "#ffffff";
+              passwordInputWidth = 0.75;
+            };
+          }
+        }/share/sddm/themes/where_is_my_sddm_theme";
+        extraPackages = [ pkgs.where-is-my-sddm-theme ];
+      };
+    };
+
+    logind = {
+      settings.Login = {
+        HandleLidSwitchDocked = "suspend";
+      };
+    };
+
+    tlp.enable = true;
+
+    # Enable the OpenSSH daemon.
+    openssh.enable = true;
+
+    # Tailscale
+    tailscale.enable = true;
+  };
+
+  systemd = {
+    packages = with pkgs; [ ghostty ];
+    user.services."app-com.mitchellh.ghostty".wantedBy =
+      # [ "default.target" ];
+      [ "graphical-session.target" ];
   };
 
   fonts = {
-    packages = with pkgs; [
-      nerd-fonts.commit-mono
-    ];
+    packages = with pkgs; [ nerd-fonts.commit-mono ];
     fontconfig = {
       defaultFonts.monospace = [ "CommitMonoNerdFont" ];
       defaultFonts.sansSerif = [ "CommitMonoNerdFont" ];
+      defaultFonts.serif = [ "CommitMonoNerdFont" ];
     };
   };
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-  };
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
