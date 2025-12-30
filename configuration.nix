@@ -147,13 +147,6 @@
       dates = "weekly";
     };
   };
-  # System maintanence
-  system.autoUpgrade = {
-    enable = true;
-    flake = inputs.self.outPath;
-    flags = [ "-L" ];
-    dates = "weekly";
-  };
 
   environment.systemPackages =
     let
