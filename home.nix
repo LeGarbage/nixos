@@ -1,46 +1,4 @@
 { pkgs, config, ... }:
-let
-  wrappedneovim =
-    let
-      buildInputs = with pkgs; [
-        # Neovim
-        wl-clipboard
-        ripgrep
-        tree-sitter
-        # Telescope-fzf-native
-        gcc
-        # Snacks dashboard
-        fortune
-        # Subway surfers
-        yt-dlp
-        ffmpeg
-        mpv
-        # Direnv.nvim
-        direnv
-        # LSPs
-        curl
-        nodejs
-        unzip
-        gnumake
-        cargo
-        rustc
-        # NOTE: nixfmt is installed here because it's broken in Mason
-        nixfmt-rfc-style
-      ];
-    in
-    pkgs.runCommand "nvim"
-      {
-        nativeBuildInputs = with pkgs; [ makeWrapper ];
-        buildInputs = buildInputs;
-      }
-      ''
-        mkdir -p $out/bin
-        cp ${pkgs.neovim}/bin/nvim $out/bin/nvim
-
-        wrapProgram $out/bin/nvim --prefix PATH : \
-            ${pkgs.lib.makeBinPath buildInputs}
-      '';
-in
 {
   services = {
     syncthing.enable = true;
@@ -144,20 +102,54 @@ in
     username = "logan";
     homeDirectory = "/home/logan";
 
-    packages = with pkgs; [
-      vlc
-      starship
-      wrappedneovim
-    ];
+    packages =
+      let
+        wrappedneovim =
+          let
+            buildInputs = with pkgs; [
+              # Neovim
+              wl-clipboard
+              ripgrep
+              tree-sitter
+              # Telescope-fzf-native
+              gcc
+              # Snacks dashboard
+              fortune
+              # Subway surfers
+              yt-dlp
+              ffmpeg
+              mpv
+              # Direnv.nvim
+              direnv
+              # LSPs
+              curl
+              nodejs
+              unzip
+              gnumake
+              cargo
+              rustc
+              # NOTE: nixfmt is installed here because it's broken in Mason
+              nixfmt-rfc-style
+            ];
+          in
+          pkgs.runCommand "nvim"
+            {
+              nativeBuildInputs = with pkgs; [ makeWrapper ];
+              buildInputs = buildInputs;
+            }
+            ''
+              mkdir -p $out/bin
+              cp ${pkgs.neovim}/bin/nvim $out/bin/nvim
 
-    # Fix hyprland theming
-    # pointerCursor = {
-    #   gtk.enable = true;
-    #   x11.enable = true;
-    #   package = pkgs.simp1e-cursors;
-    #   name = "Simp1e-Dark";
-    #   size = 24;
-    # };
+              wrapProgram $out/bin/nvim --prefix PATH : \
+                  ${pkgs.lib.makeBinPath buildInputs}
+            '';
+      in
+      [
+        pkgs.vlc
+        pkgs.starship
+        wrappedneovim
+      ];
 
     # This value determines the Home Manager release that your configuration is
     # compatible with. This helps avoid breakage when a new Home Manager release

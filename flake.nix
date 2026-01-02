@@ -15,12 +15,23 @@
     };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs =
+    { self, nixpkgs, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      nixosConfigurations.loganl = nixpkgs.lib.nixosSystem {
+      lib = nixpkgs.lib;
+    in
+    {
+      packages.${system} = {
+        leg = import ./modules/system/leg { inherit pkgs; };
+      };
+
+      devShells.${system} = {
+        leg = import ./modules/system/leg/shell.nix { inherit pkgs; };
+      };
+
+      nixosConfigurations.loganl = lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
           ./configuration.nix

@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 {
   config,
   pkgs,
@@ -48,19 +44,9 @@
   networking = {
 
     hostName = "loganl"; # Define your hostname.
-    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-    # Configure network proxy if necessary
-    # networking.proxy.default = "http://user:password@proxy:port/";
-    # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-    # Enable networking
     networkmanager.enable = true;
 
-    # Open ports in the firewall.
-    # networking.firewall.allowedTCPPorts = [ ... ];
-    # networking.firewall.allowedUDPPorts = [ ... ];
-    # Or disable the firewall altogether.
     firewall.enable = false;
   };
 
@@ -151,26 +137,30 @@
   environment.systemPackages =
     let
       rofi = pkgs.rofi.override { plugins = [ pkgs.rofi-calc ]; };
+      leg = pkgs.writeShellScriptBin "leg" ''
+        export LEG_FLAKE="/home/logan/nixos"
+        exec ${inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.leg}/bin/leg "$@"
+      '';
     in
-    with pkgs;
     [
-      ghostty
-      git
-      stow
-      hyprpanel
-      yazi
-      neovide
+      leg
       rofi
-      brightnessctl
-      linux-wallpaperengine
-      acpid
-      socat
-      jq
-      wl-clipboard
-      nodejs
-      ffmpeg
-      yt-dlp
-      where-is-my-sddm-theme
+      pkgs.ghostty
+      pkgs.git
+      pkgs.stow
+      pkgs.hyprpanel
+      pkgs.yazi
+      pkgs.neovide
+      pkgs.brightnessctl
+      pkgs.linux-wallpaperengine
+      pkgs.acpid
+      pkgs.socat
+      pkgs.jq
+      pkgs.wl-clipboard
+      pkgs.nodejs
+      pkgs.ffmpeg
+      pkgs.yt-dlp
+      pkgs.where-is-my-sddm-theme
     ];
 
   programs = {
@@ -211,17 +201,6 @@
 
     displayManager = {
       enable = true;
-      # # Use ly as display manager
-      # ly = {
-      #   enable = true;
-      #   settings = {
-      #     animation = "matrix";
-      #     asterisk = "0x2022";
-      #     bigclock = "en";
-      #     clear_password = true;
-      #     clock = "%R %F";
-      #   };
-      # };
       sddm = {
         enable = true;
         # wayland.enable = true;
@@ -254,9 +233,7 @@
 
   systemd = {
     packages = with pkgs; [ ghostty ];
-    user.services."app-com.mitchellh.ghostty".wantedBy =
-      # [ "default.target" ];
-      [ "graphical-session.target" ];
+    user.services."app-com.mitchellh.ghostty".wantedBy = [ "graphical-session.target" ];
   };
 
   fonts = {
