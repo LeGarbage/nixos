@@ -106,7 +106,7 @@
 
     packages =
       let
-        wrappedneovim =
+        wrappedNeovim =
           let
             buildInputs = with pkgs; [
               # Neovim
@@ -134,23 +134,21 @@
               nixfmt-rfc-style
             ];
           in
-          pkgs.runCommand "nvim"
-            {
-              nativeBuildInputs = with pkgs; [ makeWrapper ];
-              buildInputs = buildInputs;
-            }
-            ''
-              mkdir -p $out/bin
-              cp ${pkgs.neovim}/bin/nvim $out/bin/nvim
-
+          pkgs.symlinkJoin {
+            name = "nvim";
+            paths = [ pkgs.neovim ];
+            nativeBuildInputs = [ pkgs.makeWrapper ];
+            buildInputs = buildInputs;
+            postBuild = ''
               wrapProgram $out/bin/nvim --prefix PATH : \
                   ${pkgs.lib.makeBinPath buildInputs}
             '';
+          };
       in
       [
         pkgs.vlc
         pkgs.starship
-        wrappedneovim
+        wrappedNeovim
       ];
 
     # This value determines the Home Manager release that your configuration is

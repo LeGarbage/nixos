@@ -9,6 +9,7 @@ import Options.Applicative
 import System.Environment (lookupEnv)
 import System.Process (callProcess)
 
+-- TODO: Add gc, edit, and rollback commands
 data Command
   = Switch {flakePath :: Maybe String}
   | Boot {flakePath :: Maybe String}

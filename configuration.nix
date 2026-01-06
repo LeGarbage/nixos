@@ -137,10 +137,15 @@
   environment.systemPackages =
     let
       rofi = pkgs.rofi.override { plugins = [ pkgs.rofi-calc ]; };
-      leg = pkgs.writeShellScriptBin "leg" ''
-        export LEG_FLAKE="/home/logan/nixos"
-        exec ${inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.leg}/bin/leg "$@"
-      '';
+      leg = pkgs.symlinkJoin {
+        name = "leg";
+        paths = [ inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.leg ];
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/leg --set LEG_FLAKE "/home/logan/nixos"
+        '';
+      };
+      # leg = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.leg;
     in
     [
       leg

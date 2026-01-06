@@ -24,11 +24,11 @@
     in
     {
       packages.${system} = {
-        leg = import ./modules/system/leg { inherit pkgs; };
+        leg = import ./packages/leg { inherit pkgs; };
       };
 
       devShells.${system} = {
-        leg = import ./modules/system/leg/shell.nix { inherit pkgs; };
+        leg = import ./packages/leg/shell.nix { inherit pkgs; };
       };
 
       nixosConfigurations.loganl = lib.nixosSystem {
