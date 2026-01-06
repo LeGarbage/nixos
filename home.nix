@@ -35,6 +35,7 @@
       profiles = {
         default = {
           id = 0;
+          extensions.force = true;
           name = "default";
           isDefault = true;
         };
@@ -84,6 +85,7 @@
     targets = {
       firefox = {
         profileNames = [ "default" ];
+        colorTheme.enable = true;
       };
     };
   };
