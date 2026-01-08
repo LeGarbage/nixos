@@ -4,11 +4,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    snowfall-lib = {
-      url = "github:snowfallorg/lib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -21,18 +16,28 @@
   };
 
   outputs =
-    inputs:
-    inputs.snowfall-lib.mkFlake {
-      inherit inputs;
+    { self, nixpkgs, ... }@inputs:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+      lib = nixpkgs.lib;
+    in
+    {
+      packages.${system} = {
+        leg = import ./packages/leg { inherit pkgs; };
+      };
 
-      src = ./.;
+      devShells.${system} = {
+        leg = import ./packages/leg/shell.nix { inherit pkgs; };
+      };
 
-      snowfall = {
-        namespace = "leg";
-        meta = {
-          name = "leg";
-          title = "leg";
-        };
+      nixosConfigurations.loganl = lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./configuration.nix
+          inputs.home-manager.nixosModules.default
+          inputs.stylix.nixosModules.stylix
+        ];
       };
     };
 }

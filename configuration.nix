@@ -6,7 +6,12 @@
 }:
 
 {
-  imports = [ inputs.stylix.nixosModules.stylix ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    inputs.home-manager.nixosModules.default
+  ];
+
   boot = {
     # Bootloader.
     loader = {
@@ -50,7 +55,7 @@
 
   hardware.bluetooth.enable = true;
 
-  powerManagement.powertop.enable = true;
+  # powerManagement.powertop.enable = true;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -100,15 +105,12 @@
     ];
   };
 
-  snowfallorg.users.logan = {
-    home = {
-      config = import ./home.nix;
-    };
-  };
-
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     backupFileExtension = "bak";
+    users = {
+      "logan" = import ./home.nix;
+    };
   };
 
   # Allow unfree packages
