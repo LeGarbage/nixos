@@ -162,10 +162,10 @@
       pkgs.socat
       pkgs.jq
       pkgs.wl-clipboard
-      pkgs.nodejs
       pkgs.ffmpeg
       pkgs.yt-dlp
       pkgs.where-is-my-sddm-theme
+      pkgs.piper
     ];
 
   programs = {
@@ -201,6 +201,8 @@
 
     upower.enable = true;
     acpid.enable = true;
+
+    ratbagd.enable = true;
 
     xserver.enable = true;
 
