@@ -56,6 +56,8 @@
         init = {
           defaultBranch = "main";
         };
+        merge.tool = "codediff";
+        mergetool.codediff.cmd = ''nvim "$MERGED" -c "CodeDiff merge \"$MERGED\""'';
       };
     };
 
@@ -69,6 +71,10 @@
       config = ''
         ()
       '';
+    };
+
+    btop = {
+      enable = true;
     };
 
     # Let Home Manager install and manage itself.
@@ -137,7 +143,7 @@
               cargo
               rustc
               # NOTE: nixfmt is installed here because it's broken in Mason
-              nixfmt-rfc-style
+              nixfmt
             ];
           in
           pkgs.symlinkJoin {

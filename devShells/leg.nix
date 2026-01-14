@@ -5,7 +5,7 @@ let
 in
 hpkgs.shellFor {
   packages = p: [
-    (import ./. { inherit pkgs; })
+    pkgs.leg
   ];
   nativeBuildInputs = [
     hpkgs.haskell-language-server
