@@ -1,5 +1,25 @@
-{ pkgs, config, ... }:
 {
+  pkgs,
+  config,
+  inputs,
+  ...
+}:
+{
+  imports = [
+    inputs.self.homeModules.desktop
+  ];
+
+  internal = {
+    desktop = {
+      enable = true;
+      wallpaper.wpaperd.settings = {
+        eDP-1 = {
+          path = pkgs.nixos-artwork.wallpapers.binary-blue;
+        };
+      };
+    };
+  };
+
   services = {
     syncthing.enable = true;
     kdeconnect.enable = true;
@@ -18,15 +38,6 @@
       '';
     };
     mpd-mpris.enable = true;
-
-    wpaperd = {
-      enable = true;
-      settings = {
-        eDP-1 = {
-          path = pkgs.nixos-artwork.wallpapers.binary-blue;
-        };
-      };
-    };
   };
 
   programs = {
@@ -58,6 +69,8 @@
         };
         merge.tool = "codediff";
         mergetool.codediff.cmd = ''nvim "$MERGED" -c "CodeDiff merge \"$MERGED\""'';
+        diff.tool = "codediff";
+        difftool.codediff.cmd = ''nvim "$LOCAL" "$REMOTE" +"CodeDiff file $LOCAL $REMOTE"'';
       };
     };
 
@@ -140,8 +153,6 @@
               nodejs
               unzip
               gnumake
-              cargo
-              rustc
               # NOTE: nixfmt is installed here because it's broken in Mason
               nixfmt
             ];

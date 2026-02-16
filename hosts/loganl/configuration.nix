@@ -1,6 +1,6 @@
 {
-  config,
   pkgs,
+  config,
   inputs,
   ...
 }:
@@ -9,8 +9,18 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    inputs.home-manager.nixosModules.default
+    inputs.home-manager.nixosModules.home-manager
+    inputs.self.nixosModules.desktop
+    inputs.self.nixosModules.laptop
   ];
+
+  internal = {
+    desktop = {
+      enable = true;
+      waydroid.enable = true;
+    };
+    laptop.enable = true;
+  };
 
   boot = {
     # Bootloader.
@@ -53,9 +63,10 @@
   # Set your time zone.
   time.timeZone = "America/Denver";
 
-  hardware.bluetooth.enable = true;
-
-  # powerManagement.powertop.enable = true;
+  hardware = {
+    bluetooth.enable = true;
+    enableAllFirmware = true;
+  };
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -108,6 +119,8 @@
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     backupFileExtension = "bak";
+    useGlobalPkgs = true;
+    useUserPackages = true;
     users = {
       "logan" = import ./home.nix;
     };
@@ -150,21 +163,10 @@
     [
       leg
       rofi
-      pkgs.ghostty
       pkgs.git
       pkgs.stow
-      pkgs.hyprpanel
-      pkgs.yazi
-      pkgs.neovide
-      pkgs.brightnessctl
-      pkgs.linux-wallpaperengine
-      pkgs.acpid
-      pkgs.socat
-      pkgs.jq
-      pkgs.wl-clipboard
       pkgs.ffmpeg
       pkgs.yt-dlp
-      pkgs.where-is-my-sddm-theme
       pkgs.piper
     ];
 
@@ -177,9 +179,6 @@
         glibc
       ];
     };
-
-    hyprland.enable = true;
-    hyprlock.enable = true;
 
     neovim = {
       enable = true;
@@ -197,39 +196,7 @@
   };
 
   services = {
-    hypridle.enable = true;
-
-    upower.enable = true;
-    acpid.enable = true;
-
     ratbagd.enable = true;
-
-    xserver.enable = true;
-
-    displayManager = {
-      enable = true;
-      sddm = {
-        enable = true;
-        # wayland.enable = true;
-        theme = "${
-          pkgs.where-is-my-sddm-theme.override {
-            themeConfig.General = {
-              passwordCursorColor = "#ffffff";
-              passwordInputWidth = 0.75;
-            };
-          }
-        }/share/sddm/themes/where_is_my_sddm_theme";
-        extraPackages = [ pkgs.where-is-my-sddm-theme ];
-      };
-    };
-
-    logind = {
-      settings.Login = {
-        HandleLidSwitchDocked = "suspend";
-      };
-    };
-
-    tlp.enable = true;
 
     # Enable the OpenSSH daemon.
     openssh.enable = true;

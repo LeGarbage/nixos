@@ -3,14 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flakelight.url = "github:nix-community/flakelight";
 
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    flakelight = {
-      url = "github:nix-community/flakelight";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -22,33 +18,13 @@
 
   outputs =
     { flakelight, ... }@inputs:
+    # Use flakelight to manage the flake. Each directory in nixDir corresponds
+    # to an output of the flake, with each file/subdirectory being an attribute
+    # of said output
     flakelight ./. {
       inherit inputs;
       nixDir = ./.;
+      # The "hosts" directory can be used in place of nixosConfigurations
       nixDirAliases.nixosConfigurations = [ "hosts" ];
     };
-  # { self, nixpkgs, ... }@inputs:
-  # let
-  #   system = "x86_64-linux";
-  #   pkgs = nixpkgs.legacyPackages.${system};
-  #   lib = nixpkgs.lib;
-  # in
-  # {
-  #   packages.${system} = {
-  #     leg = import ./packages/leg { inherit pkgs; };
-  #   };
-  #
-  #   devShells.${system} = {
-  #     leg = import ./packages/leg/shell.nix { inherit pkgs; };
-  #   };
-  #
-  #   nixosConfigurations.loganl = lib.nixosSystem {
-  #     specialArgs = { inherit inputs; };
-  #     modules = [
-  #       ./configuration.nix
-  #       inputs.home-manager.nixosModules.default
-  #       inputs.stylix.nixosModules.stylix
-  #     ];
-  #   };
-  # };
 }
