@@ -15,10 +15,7 @@
   ];
 
   internal = {
-    desktop = {
-      enable = true;
-      waydroid.enable = true;
-    };
+    desktop.enable = true;
     laptop.enable = true;
   };
 

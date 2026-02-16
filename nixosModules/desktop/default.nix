@@ -8,7 +8,7 @@ let
   cfg = config.internal.desktop;
 in
 {
-  imports = [ ./waydroid.nix ];
+  imports = [ ];
   options = {
     internal.desktop.enable = lib.mkEnableOption "system desktop configuration";
   };
