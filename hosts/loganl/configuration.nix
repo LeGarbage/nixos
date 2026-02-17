@@ -12,40 +12,15 @@
     inputs.home-manager.nixosModules.home-manager
     inputs.self.nixosModules.desktop
     inputs.self.nixosModules.laptop
+    inputs.self.nixosModules.common
   ];
 
   internal = {
     desktop.enable = true;
     laptop.enable = true;
-  };
-
-  boot = {
-    # Bootloader.
-    loader = {
-      efi.canTouchEfiVariables = true;
-      efi.efiSysMountPoint = "/boot";
-      grub = {
-        enable = true;
-        efiSupport = true;
-        device = "nodev";
-        configurationLimit = 10;
-        extraEntries = ''
-          menuentry "System shutdown" {
-              echo "System shutting down..."
-              halt
-          }
-
-
-          if [ ''${grub_platform} == "efi" ]; then
-              menuentry 'UEFI Firmware Settings' --id 'uefi-firmware' {
-                  fwsetup
-              }
-          fi
-        '';
-      };
+    common = {
+      nix.storeStrategy = "normal";
     };
-
-    kernelPackages = pkgs.linuxPackages_latest;
   };
 
   networking = {
@@ -63,21 +38,6 @@
   hardware = {
     bluetooth.enable = true;
     enableAllFirmware = true;
-  };
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
   };
 
   stylix = {
@@ -123,27 +83,6 @@
     };
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-  nix = {
-    settings = {
-      # Use flakes
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-    };
-    optimise = {
-      automatic = true;
-      dates = "weekly";
-    };
-    gc = {
-      automatic = true;
-      options = "--delete-older-than 14d";
-      dates = "weekly";
-    };
-  };
-
   environment.systemPackages =
     let
       rofi = pkgs.rofi.override { plugins = [ pkgs.rofi-calc ]; };
@@ -177,29 +116,11 @@
       ];
     };
 
-    neovim = {
-      enable = true;
-      defaultEditor = true;
-    };
-
-    bash = {
-      enable = true;
-      blesh.enable = true;
-    };
-
     steam.enable = true;
-
-    firefox.enable = true;
   };
 
   services = {
     ratbagd.enable = true;
-
-    # Enable the OpenSSH daemon.
-    openssh.enable = true;
-
-    # Tailscale
-    tailscale.enable = true;
   };
 
   systemd = {

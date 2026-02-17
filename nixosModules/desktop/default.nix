@@ -21,6 +21,8 @@ in
     programs = {
       hyprland.enable = true;
       hyprlock.enable = true;
+
+      firefox.enable = true;
     };
 
     services = {
