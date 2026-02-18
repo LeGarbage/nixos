@@ -24,6 +24,8 @@ in
         enable = true;
         blesh.enable = true;
       };
+
+      git.enable = true;
     };
 
     services = {

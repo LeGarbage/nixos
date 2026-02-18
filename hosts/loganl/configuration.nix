@@ -83,28 +83,12 @@
     };
   };
 
-  environment.systemPackages =
-    let
-      rofi = pkgs.rofi.override { plugins = [ pkgs.rofi-calc ]; };
-      leg = pkgs.symlinkJoin {
-        name = "leg";
-        paths = [ inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.leg ];
-        nativeBuildInputs = [ pkgs.makeWrapper ];
-        postBuild = ''
-          wrapProgram $out/bin/leg --set LEG_FLAKE "/home/logan/nixos"
-        '';
-      };
-      # leg = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.leg;
-    in
-    [
-      leg
-      rofi
-      pkgs.git
-      pkgs.stow
-      pkgs.ffmpeg
-      pkgs.yt-dlp
-      pkgs.piper
-    ];
+  environment.systemPackages = [
+    pkgs.stow
+    pkgs.ffmpeg
+    pkgs.yt-dlp
+    pkgs.piper
+  ];
 
   programs = {
     nix-ld = {

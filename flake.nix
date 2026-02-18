@@ -23,6 +23,9 @@
     # of said output
     flakelight ./. {
       inherit inputs;
+      withOverlays = [
+        inputs.self.overlays.overrides
+      ];
       nixDir = ./.;
       # The "hosts" directory can be used in place of nixosConfigurations
       nixDirAliases.nixosConfigurations = [ "hosts" ];

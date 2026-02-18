@@ -18,6 +18,7 @@ in
       yazi
       neovide
       hyprpanel
+      rofi
 
       # Hyprpanel
       brightnessctl
