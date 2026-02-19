@@ -13,9 +13,13 @@
 
   internal = {
     common = {
+      boot.blankTty = 60;
       nix.storeStrategy = "aggressive";
+      tailscale.exitNode.enable = true;
     };
   };
+
+  nix.settings.trusted-users = [ "@wheel" ];
 
   networking = {
     hostName = "barry";
@@ -38,6 +42,10 @@
       "wheel"
     ];
   };
+
+  environment.systemPackages = [
+    pkgs.stow
+  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

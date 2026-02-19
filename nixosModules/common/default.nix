@@ -10,6 +10,7 @@ in
     ./boot.nix
     ./nix.nix
     ./ssh.nix
+    ./tailscale.nix
   ];
   options = {
   };
@@ -27,10 +28,6 @@ in
       };
 
       git.enable = true;
-    };
-
-    services = {
-      tailscale.enable = true;
     };
 
     networking.networkmanager.enable = true;
