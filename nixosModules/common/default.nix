@@ -9,6 +9,7 @@ in
   imports = [
     ./boot.nix
     ./nix.nix
+    ./ssh.nix
   ];
   options = {
   };
@@ -31,6 +32,8 @@ in
     services = {
       tailscale.enable = true;
     };
+
+    networking.networkmanager.enable = true;
 
     # Select internationalisation properties.
     i18n.defaultLocale = "en_US.UTF-8";

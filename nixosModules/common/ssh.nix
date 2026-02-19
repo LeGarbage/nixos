@@ -22,7 +22,7 @@ in
         };
       };
 
-      fail2ban.enable = true;
+      # fail2ban.enable = true;
     };
   };
 }
