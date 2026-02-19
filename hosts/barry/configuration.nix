@@ -45,7 +45,40 @@
 
   environment.systemPackages = [
     pkgs.stow
+    pkgs.starship
   ];
+
+  services = {
+    radicale = {
+      enable = true;
+
+      settings = {
+        server.hosts = [ "localhost:5232" ];
+        auth = {
+          type = "htpasswd";
+          htpasswd_filename = "/etc/radicale/users";
+          htpasswd_encryption = "sha512";
+        };
+      };
+    };
+
+    caddy = {
+      enable = true;
+
+      virtualHosts = {
+        "${config.networking.hostName}.tadpole-escalator.ts.net:5233" = {
+          extraConfig = ''
+            reverse_proxy localhost:5232
+          '';
+        };
+      };
+    };
+
+    tailscale = {
+      # Needed for caddy to get TLS certs
+      permitCertUid = "caddy";
+    };
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
