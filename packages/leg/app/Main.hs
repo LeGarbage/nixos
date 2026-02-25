@@ -1,6 +1,3 @@
-{-# LANGUAGE NoFieldSelectors #-}
-{-# OPTIONS_GHC -Wno-unused-top-binds #-}
-
 module Main (main) where
 
 import Control.Monad (when)
@@ -11,9 +8,10 @@ import System.Process (createProcess, proc, waitForProcess)
 
 -- TODO: Add gc, edit, and rollback commands
 data Command
-  = Switch {flakePath :: Maybe String}
-  | Boot {flakePath :: Maybe String}
-  | Update {shouldRebuild :: Bool, flakePath :: Maybe String, commitLockFile :: Bool}
+  = Switch (Maybe String)
+  | Boot (Maybe String)
+  | Update (Maybe String) Bool Bool
+  | Deploy (Maybe String) String
   | Info
 
 commandParser :: Parser Command
@@ -22,6 +20,7 @@ commandParser =
     ( command "switch" (info switchParser (progDesc "Build configuration and switch to it"))
         <> command "boot" (info bootParser (progDesc "Build configuration and set for next boot"))
         <> command "update" (info updateParser (progDesc "Update configuration flake"))
+        <> command "deploy" (info deployParser (progDesc "Deploy configuration to remote host"))
         <> command "info" (info (pure Info) (progDesc "Show system info"))
     )
 
@@ -36,12 +35,7 @@ flakeParser =
       )
 
 shouldRebuildParser :: Parser Bool
-shouldRebuildParser =
-  flag
-    True
-    False
-    ( long "no-switch" <> help "Do not rebuild and switch after updating"
-    )
+shouldRebuildParser = switch (long "switch" <> help "Rebuild and switch after updating")
 
 commitLockFileParser :: Parser Bool
 commitLockFileParser =
@@ -51,12 +45,18 @@ commitLockFileParser =
     ( long "no-commit" <> help "Do not commit the updated flake.lock"
     )
 
+hostParser :: Parser String
+hostParser = argument str (metavar "HOST")
+
 switchParser, bootParser :: Parser Command
 switchParser = Switch <$> flakeParser
 bootParser = Boot <$> flakeParser
 
 updateParser :: Parser Command
-updateParser = Update <$> shouldRebuildParser <*> flakeParser <*> commitLockFileParser
+updateParser = Update <$> flakeParser <*> shouldRebuildParser <*> commitLockFileParser
+
+deployParser :: Parser Command
+deployParser = Deploy <$> flakeParser <*> hostParser
 
 main :: IO ()
 main = run =<< execParser opts
@@ -72,11 +72,16 @@ main = run =<< execParser opts
 run :: Command -> IO ()
 run (Switch flake) = nixosRebuild "switch" flake
 run (Boot flake) = nixosRebuild "boot" flake
-run (Update shouldRebuild flake commitLockFile) = do
+run (Update flake shouldRebuild commitLockFile) = do
   let updateArgs = ["flake", "update"] ++ ["--commit-lock-file" | commitLockFile]
   runCmdWithFlake "nix" updateArgs flake
   putStrLn "Update completed"
   when shouldRebuild (nixosRebuild "switch" flake)
+run (Deploy flake host) =
+  runCmdWithFlake
+    "nixos-rebuild"
+    ["switch", "--target-host", host, "--ask-sudo-password"]
+    flake
 run Info = do
   _ <- runCmd "nixos-version" []
   pure ()
