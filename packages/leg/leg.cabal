@@ -52,7 +52,10 @@ executable leg
     build-depends:
         base ^>=4.18.3.0,
         process,
-        optparse-applicative ^>=0.18.1.0
+        optparse-applicative ^>=0.18.1.0,
+        aeson ^>=2.2.3.0,
+        text ^>=2.0
+
 
     -- Directories containing source files.
     hs-source-dirs:   app
