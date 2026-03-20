@@ -2,6 +2,7 @@
   pkgs,
   config,
   inputs,
+  lib,
   ...
 }:
 {
@@ -103,6 +104,32 @@
     };
   };
 
+  xdg = {
+    # https://github.com/nix-community/stylix/issues/1958#issuecomment-3607824025
+    configFile.kdeglobals.source =
+      let
+        themePackage = builtins.head (
+          builtins.filter (
+            p: builtins.match ".*stylix-kde-theme.*" (builtins.baseNameOf p) != null
+          ) config.home.packages
+        );
+        colorSchemeSlug = lib.concatStrings (
+          lib.filter lib.isString (builtins.split "[^a-zA-Z]" config.lib.stylix.colors.scheme)
+        );
+      in
+      "${themePackage}/share/color-schemes/${colorSchemeSlug}.colors";
+
+    userDirs = {
+      enable = true;
+      download = "${config.home.homeDirectory}/Downloads";
+      music = "${config.home.homeDirectory}/Music";
+      pictures = "${config.home.homeDirectory}/Pictures";
+      extraConfig = {
+        SCREENSHOTS = "${config.home.homeDirectory}/Pictures/Screenshots";
+      };
+    };
+  };
+
   home = {
     # Home Manager needs a bit of information about you and the paths it should
     # manage.
@@ -152,6 +179,8 @@
         pkgs.vlc
         pkgs.starship
         wrappedNeovim
+        pkgs.kdePackages.plasma-integration
+        pkgs.kdePackages.breeze
       ];
 
     # This value determines the Home Manager release that your configuration is

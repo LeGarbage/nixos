@@ -86,6 +86,10 @@
     pkgs.piper
   ];
 
+  environment.pathsToLink = [
+    "/share/akonadi"
+  ];
+
   programs = {
     nix-ld = {
       enable = true;
@@ -97,10 +101,17 @@
     };
 
     steam.enable = true;
+
+    kde-pim = {
+      enable = true;
+      merkuro = true;
+    };
   };
 
   services = {
     ratbagd.enable = true;
+
+    gnome.gnome-keyring.enable = true;
   };
 
   systemd = {
