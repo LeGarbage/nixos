@@ -25,19 +25,6 @@
     kdeconnect.enable = true;
 
     cliphist.enable = true;
-
-    mpd = {
-      enable = true;
-      musicDirectory = "${config.home.homeDirectory}/Music";
-      network.startWhenNeeded = true;
-      extraConfig = ''
-        audio_output {
-            type "pipewire"
-            name "PipeWire Sound Server"
-        }
-      '';
-    };
-    mpd-mpris.enable = true;
   };
 
   programs = {
@@ -77,13 +64,6 @@
     direnv = {
       enable = true;
       nix-direnv.enable = true;
-    };
-
-    rmpc = {
-      enable = true;
-      config = ''
-        ()
-      '';
     };
 
     btop = {
