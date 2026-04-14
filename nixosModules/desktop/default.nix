@@ -11,6 +11,7 @@ in
   imports = [ ];
   options = {
     internal.desktop.enable = lib.mkEnableOption "system desktop configuration";
+    internal.desktop.remapCapslock = lib.mkEnableOption "remap capslock with keyd to be esc on press and ctrl on hold";
   };
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
@@ -26,6 +27,23 @@ in
     };
 
     services = {
+      keyd = lib.mkIf cfg.remapCapslock {
+        enable = true;
+        keyboards = {
+          default = {
+            ids = [ "*" ];
+            settings = {
+              main = {
+                # Maps capslock to escape when pressed and control when held
+                capslock = "overload(control, esc)";
+                # Remaps the escape key to capslock
+                esc = "capslock";
+              };
+            };
+          };
+        };
+      };
+
       hypridle.enable = true;
 
       # For hyprpanel

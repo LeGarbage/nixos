@@ -16,7 +16,10 @@
   ];
 
   internal = {
-    desktop.enable = true;
+    desktop = {
+      enable = true;
+      remapCapslock = true;
+    };
     laptop.enable = true;
     common = {
       nix.storeStrategy = "normal";
