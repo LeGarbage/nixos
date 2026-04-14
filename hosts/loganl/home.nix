@@ -102,6 +102,8 @@
     font = {
       name = "CommitMonoNerdFont";
     };
+
+    gtk4.theme = null;
   };
 
   xdg = {
@@ -121,6 +123,7 @@
 
     userDirs = {
       enable = true;
+      setSessionVariables = false;
       download = "${config.home.homeDirectory}/Downloads";
       music = "${config.home.homeDirectory}/Music";
       pictures = "${config.home.homeDirectory}/Pictures";
