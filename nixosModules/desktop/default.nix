@@ -49,6 +49,7 @@ in
       # For hyprpanel
       upower.enable = true;
 
+      # For sddm
       xserver.enable = true;
       displayManager = {
         enable = true;

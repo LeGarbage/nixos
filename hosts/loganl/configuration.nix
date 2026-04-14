@@ -109,6 +109,8 @@
       enable = true;
       merkuro = true;
     };
+
+    seahorse.enable = true;
   };
 
   services = {
@@ -116,6 +118,9 @@
 
     gnome.gnome-keyring.enable = true;
   };
+
+  # HACK: workaround for https://github.com/NixOS/nixpkgs/issues/86884
+  security.pam.services.sddm.enableGnomeKeyring = true;
 
   systemd = {
     packages = with pkgs; [ ghostty ];
