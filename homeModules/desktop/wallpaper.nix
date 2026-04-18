@@ -37,11 +37,6 @@ in
       linux-wallpaperengine
       socat
       jq
-      ghostty
-      hyprpanel
-      yazi
-      neovide
-      brightnessctl
     ];
 
     programs.hyprshot = {

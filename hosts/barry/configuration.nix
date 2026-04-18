@@ -8,6 +8,7 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    inputs.home-manager.nixosModules.home-manager
     inputs.self.nixosModules.common
   ];
 
@@ -37,15 +38,25 @@
   users.users.logan = {
     isNormalUser = true;
     description = "logan";
+    linger = true;
     extraGroups = [
       "networkmanager"
       "wheel"
     ];
   };
 
+  home-manager = {
+    extraSpecialArgs = { inherit inputs; };
+    backupFileExtension = "bak";
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users = {
+      "logan" = import ./home.nix;
+    };
+  };
+
   environment.systemPackages = [
     pkgs.stow
-    pkgs.starship
   ];
 
   services = {
