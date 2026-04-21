@@ -8,12 +8,14 @@ let
   cfg = config.internal.desktop;
 in
 {
-  imports = [ ];
+  imports = [ ./boot.nix ];
   options = {
     internal.desktop.enable = lib.mkEnableOption "system desktop configuration";
     internal.desktop.remapCapslock = lib.mkEnableOption "remap capslock with keyd to be esc on press and ctrl on hold";
   };
   config = lib.mkIf cfg.enable {
+    internal.desktop.boot.enable = true;
+
     environment.systemPackages = with pkgs; [
       where-is-my-sddm-theme
       wl-clipboard
