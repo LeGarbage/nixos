@@ -16,10 +16,10 @@ in
     home.packages = with pkgs; [
       ghostty
       neovide
-      hyprpanel
+      wayle
       rofi
 
-      # Hyprpanel
+      # For Hyprland
       brightnessctl
     ];
 
