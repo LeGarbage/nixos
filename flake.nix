@@ -25,6 +25,7 @@
       inherit inputs;
       withOverlays = [
         inputs.self.overlays.overrides
+        inputs.self.overlays.neovim
       ];
       nixDir = ./.;
       # The "hosts" directory can be used in place of nixosConfigurations

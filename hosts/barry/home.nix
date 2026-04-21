@@ -26,47 +26,10 @@
     username = "logan";
     homeDirectory = "/home/logan";
 
-    packages =
-      let
-        wrappedNeovim =
-          let
-            buildInputs = with pkgs; [
-              # Neovim
-              ripgrep
-              tree-sitter
-              git
-              fd
-
-              # Blink
-              curl
-
-              # Telescope-fzf-native
-              gcc
-              # Snacks dashboard
-              fortune
-              # Direnv.nvim
-              direnv
-
-              # nil and nixfmt should be installed globally
-              nixfmt
-              nil
-            ];
-          in
-          pkgs.symlinkJoin {
-            name = "nvim";
-            paths = [ pkgs.neovim ];
-            nativeBuildInputs = [ pkgs.makeWrapper ];
-            buildInputs = buildInputs;
-            postBuild = ''
-              wrapProgram $out/bin/nvim --prefix PATH : \
-                  ${pkgs.lib.makeBinPath buildInputs}
-            '';
-          };
-      in
-      [
-        pkgs.starship
-        wrappedNeovim
-      ];
+    packages = with pkgs; [
+      starship
+      wrappedNeovim
+    ];
 
     # This value determines the Home Manager release that your configuration is
     # compatible with. This helps avoid breakage when a new Home Manager release

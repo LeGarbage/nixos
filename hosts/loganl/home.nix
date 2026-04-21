@@ -108,52 +108,15 @@
     username = "logan";
     homeDirectory = "/home/logan";
 
-    packages =
-      let
-        wrappedNeovim =
-          let
-            buildInputs = with pkgs; [
-              # Neovim
-              wl-clipboard
-              ripgrep
-              tree-sitter
-              # Telescope-fzf-native
-              gcc
-              # Snacks dashboard
-              fortune
-              # Subway surfers
-              yt-dlp
-              ffmpeg
-              mpv
-              # Direnv.nvim
-              direnv
-              # LSPs
-              curl
-              nodejs
-              unzip
-              gnumake
-              # NOTE: nixfmt is installed here because it's broken in Mason
-              nixfmt
-            ];
-          in
-          pkgs.symlinkJoin {
-            name = "nvim";
-            paths = [ pkgs.neovim ];
-            nativeBuildInputs = [ pkgs.makeWrapper ];
-            buildInputs = buildInputs;
-            postBuild = ''
-              wrapProgram $out/bin/nvim --prefix PATH : \
-                  ${pkgs.lib.makeBinPath buildInputs}
-            '';
-          };
-      in
-      [
-        pkgs.vlc
-        pkgs.starship
-        wrappedNeovim
-        pkgs.kdePackages.plasma-integration
-        pkgs.kdePackages.breeze
-      ];
+    packages = with pkgs; [
+      vlc
+      starship
+      wrappedNeovim
+      kdePackages.plasma-integration
+      kdePackages.breeze
+      vscode-fhs
+      obsidian
+    ];
 
     # This value determines the Home Manager release that your configuration is
     # compatible with. This helps avoid breakage when a new Home Manager release
