@@ -1,5 +1,4 @@
 {
-  pkgs,
   config,
   lib,
   ...
@@ -72,8 +71,6 @@ in
           ];
         };
       };
-
-      environment.systemPackages = with pkgs; [ legWithFlake ];
     }
     (lib.mkIf (cfg.storeStrategy == "aggressive") presets.aggressive)
     (lib.mkIf (cfg.storeStrategy == "normal") presets.normal)
