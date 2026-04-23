@@ -1,5 +1,7 @@
 {
+  config,
   pkgs,
+  lib,
   inputs,
   ...
 }:
@@ -14,11 +16,53 @@
     };
   };
 
-  services = {
-    syncthing.enable = true;
+  programs = {
+    password-store.enable = true;
+    gpg.enable = true;
   };
 
-  systemd.user.services.syncthing.Install.WantedBy = [ "multi-user.target" ];
+  services = {
+    syncthing.enable = true;
+
+    restic = {
+      enable = true;
+      backups = {
+        obsidian-local = {
+          initialize = true;
+          paths = [ "${config.home.homeDirectory}/obsidian" ];
+          repository = "/srv/backups/obsidian";
+          passwordCommand = "${lib.getExe pkgs.pass} restic/obsidian-local";
+          pruneOpts = [
+            "--keep-daily 7"
+            "--keep-weekly 4"
+            "--keep-monthly 12"
+          ];
+        };
+        obsidian-remote = {
+          initialize = true;
+          paths = [ "${config.home.homeDirectory}/obsidian" ];
+          repository = "rclone:drive:backups/obsidian";
+          passwordCommand = "${lib.getExe pkgs.pass} restic/obsidian-remote";
+          pruneOpts = [
+            "--keep-daily 7"
+            "--keep-weekly 4"
+            "--keep-monthly 12"
+          ];
+        };
+      };
+    };
+
+    gpg-agent = {
+      enable = true;
+      pinentry = {
+        package = pkgs.pinentry-gnome3;
+      };
+    };
+  };
+
+  systemd.user.services = {
+    syncthing.Install.WantedBy = [ "multi-user.target" ];
+  };
 
   home = {
     # Home Manager needs a bit of information about you and the paths it should
@@ -29,6 +73,11 @@
     packages = with pkgs; [
       starship
       wrappedNeovim
+      gcr
+      # TODO: Configure with home manager once rclone's configuration gets fixed
+      #       https://discourse.nixos.org/t/programs-modifying-config-files-created-by-home-manager/42878
+      #       https://github.com/rclone/rclone/issues/3655
+      rclone
     ];
 
     # This value determines the Home Manager release that your configuration is
