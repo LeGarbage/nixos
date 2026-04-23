@@ -19,6 +19,8 @@ final: prev: {
         fortune
         # Direnv.nvim
         direnv
+        # render-markdown.nvim
+        final.libtexprintf
 
         # nil and nixfmt should be installed globally
         nixfmt
