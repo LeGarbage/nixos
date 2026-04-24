@@ -4,12 +4,12 @@
   ...
 }:
 let
-  cfg = config.internal.desktop.boot;
+  cfg = config.internal.desktop.bootSplash;
 in
 {
   imports = [ ];
   options = {
-    internal.desktop.boot.enable = lib.mkEnableOption "plymouth boot splash";
+    internal.desktop.bootSplash.enable = lib.mkEnableOption "plymouth boot splash";
   };
   config = lib.mkIf cfg.enable {
     boot = {

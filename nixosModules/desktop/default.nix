@@ -8,16 +8,18 @@ let
   cfg = config.internal.desktop;
 in
 {
-  imports = [ ./boot.nix ];
+  imports = [
+    ./boot-splash.nix
+    ./display-manager.nix
+  ];
   options = {
     internal.desktop.enable = lib.mkEnableOption "system desktop configuration";
     internal.desktop.remapCapslock = lib.mkEnableOption "remap capslock with keyd to be esc on press and ctrl on hold";
   };
   config = lib.mkIf cfg.enable {
-    internal.desktop.boot.enable = true;
+    internal.desktop.bootSplash.enable = true;
 
     environment.systemPackages = with pkgs; [
-      where-is-my-sddm-theme
       wl-clipboard
     ];
 
@@ -50,24 +52,6 @@ in
 
       # For hyprpanel
       upower.enable = true;
-
-      # For sddm
-      xserver.enable = true;
-      displayManager = {
-        enable = true;
-        sddm = {
-          enable = true;
-          theme = "${
-            pkgs.where-is-my-sddm-theme.override {
-              themeConfig.General = {
-                passwordCursorColor = "#ffffff";
-                passwordInputWidth = 0.75;
-              };
-            }
-          }/share/sddm/themes/where_is_my_sddm_theme";
-          extraPackages = [ pkgs.where-is-my-sddm-theme ];
-        };
-      };
     };
   };
 }

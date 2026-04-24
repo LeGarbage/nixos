@@ -119,9 +119,6 @@
     gnome.gnome-keyring.enable = true;
   };
 
-  # HACK: workaround for https://github.com/NixOS/nixpkgs/issues/86884
-  security.pam.services.sddm.enableGnomeKeyring = true;
-
   systemd = {
     packages = with pkgs; [ ghostty ];
     user.services."app-com.mitchellh.ghostty".wantedBy = [ "graphical-session.target" ];
