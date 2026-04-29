@@ -26,30 +26,39 @@
 
     restic = {
       enable = true;
-      backups = {
-        obsidian-local = {
-          initialize = true;
-          paths = [ "${config.home.homeDirectory}/obsidian" ];
-          repository = "/srv/backups/obsidian";
-          passwordCommand = "${lib.getExe pkgs.pass} restic/obsidian-local";
-          pruneOpts = [
-            "--keep-daily 7"
-            "--keep-weekly 4"
-            "--keep-monthly 12"
-          ];
+      backups =
+        let
+          obsidianPath = "${config.home.homeDirectory}/obsidian/main";
+          obsidianOpts = {
+            pruneOpts = [
+              "--keep-daily 7"
+              "--keep-weekly 4"
+              "--keep-monthly 12"
+            ];
+            exclude = [
+              ".stfolder"
+              ".trash"
+              ".direnv"
+              ".rumdl_cache"
+            ];
+            paths = [ obsidianPath ];
+            timerConfig = null;
+          };
+        in
+        {
+          obsidian-main-local = {
+            initialize = true;
+            repository = "/srv/backups/obsidian";
+            passwordCommand = "${lib.getExe pkgs.pass} restic/obsidian-local";
+          }
+          // obsidianOpts;
+          obsidian-main-remote = {
+            initialize = true;
+            repository = "rclone:drive:backups/obsidian";
+            passwordCommand = "${lib.getExe pkgs.pass} restic/obsidian-remote";
+          }
+          // obsidianOpts;
         };
-        obsidian-remote = {
-          initialize = true;
-          paths = [ "${config.home.homeDirectory}/obsidian" ];
-          repository = "rclone:drive:backups/obsidian";
-          passwordCommand = "${lib.getExe pkgs.pass} restic/obsidian-remote";
-          pruneOpts = [
-            "--keep-daily 7"
-            "--keep-weekly 4"
-            "--keep-monthly 12"
-          ];
-        };
-      };
     };
 
     gpg-agent = {
@@ -60,8 +69,49 @@
     };
   };
 
-  systemd.user.services = {
-    syncthing.Install.WantedBy = [ "multi-user.target" ];
+  systemd.user = {
+    services = {
+      syncthing.Install.WantedBy = [ "multi-user.target" ];
+
+      restic-backups-obsidian-main-format = {
+        Unit = {
+          Wants = [
+            "restic-backups-obsidian-main-local.service"
+            "restic-backups-obsidian-main-remote.service"
+          ];
+        };
+
+        Service = {
+          Type = "oneshot";
+
+          ExecStart = "${pkgs.nix}/bin/nix fmt";
+          WorkingDirectory = "${config.home.homeDirectory}/obsidian/main";
+        };
+      };
+
+      restic-backups-obsidian-main-local = {
+        Unit = {
+          After = [ "restic-backups-obsidian-main-format.service" ];
+        };
+      };
+
+      restic-backups-obsidian-main-remote = {
+        Unit = {
+          After = [ "restic-backups-obsidian-main-format.service" ];
+        };
+      };
+    };
+
+    timers = {
+      restic-backups-obsidian-main-format = {
+        Install.WantedBy = [ "timers.target" ];
+
+        Timer = {
+          OnCalendar = "daily";
+          Persistent = true;
+        };
+      };
+    };
   };
 
   home = {
