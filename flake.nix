@@ -3,7 +3,11 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    flakelight.url = "github:nix-community/flakelight";
+
+    flakelight = {
+      url = "github:nix-community/flakelight";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     home-manager = {
       url = "github:nix-community/home-manager";
