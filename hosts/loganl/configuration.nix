@@ -85,7 +85,7 @@
   environment.systemPackages = [
     pkgs.stow
     pkgs.ffmpeg
-    pkgs.yt-dlp
+    # pkgs.yt-dlp
     pkgs.piper
   ];
 

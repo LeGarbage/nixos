@@ -34,7 +34,11 @@ in
   };
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
-      linux-wallpaperengine
+      (linux-wallpaperengine.override {
+        mpv = pkgs.mpv.override {
+          youtubeSupport = false;
+        };
+      })
       socat
       jq
     ];
