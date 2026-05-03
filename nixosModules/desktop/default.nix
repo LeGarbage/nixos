@@ -53,5 +53,7 @@ in
       # For hyprpanel
       upower.enable = true;
     };
+
+    systemd.user.services.hypridle.path = [ pkgs.brightnessctl ];
   };
 }
