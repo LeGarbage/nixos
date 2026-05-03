@@ -16,7 +16,10 @@
       enable = true;
       wallpaper.wpaperd.settings = {
         eDP-1 = {
-          path = pkgs.nixos-artwork.wallpapers.binary-blue;
+          path = pkgs.fetchurl {
+            url = "https://raw.githubusercontent.com/Narmis-E/onedark-wallpapers/6f084e27d7a407be5c73a9fc88a5644408b74dca/minimal/od_planets.png";
+            hash = "sha256-x9Btp5f+i5QAQPJHDGEJHcRDvBIKDmoG65DmlhTqoOQ=";
+          };
         };
       };
     };
@@ -105,6 +108,8 @@
     mimeApps = {
       enable = true;
       defaultApplications = {
+        "inode/directory" = "yazi.desktop";
+
         "text/plain" = "neovide.desktop";
         "text/x-script.python" = "neovide.desktop";
         "application/x-shellscript" = "neovide.desktop";
@@ -133,8 +138,10 @@
       wrappedNeovim
       kdePackages.plasma-integration
       kdePackages.breeze
-      vscode-fhs
+      # vscode-fhs
+      zed-editor
       obsidian
+      spotify
     ];
 
     # This value determines the Home Manager release that your configuration is
