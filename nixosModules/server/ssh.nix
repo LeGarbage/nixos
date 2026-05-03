@@ -1,15 +1,17 @@
 {
   config,
+  lib,
   ...
 }:
 let
-  cfg = config.internal.common.ssh;
+  cfg = config.internal.server.ssh;
 in
 {
   imports = [ ];
   options = {
+    internal.server.ssh.enable = lib.mkEnableOption "ssh server";
   };
-  config = {
+  config = lib.mkIf cfg.enable {
     services = {
       openssh = {
         enable = true;

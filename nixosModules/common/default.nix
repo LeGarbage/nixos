@@ -9,7 +9,6 @@ in
   imports = [
     ./boot.nix
     ./nix.nix
-    ./ssh.nix
     ./tailscale.nix
   ];
   options = {
