@@ -10,6 +10,7 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     inputs.home-manager.nixosModules.home-manager
+    inputs.stylix.nixosModules.stylix
     inputs.self.nixosModules.desktop
     inputs.self.nixosModules.laptop
     inputs.self.nixosModules.common
