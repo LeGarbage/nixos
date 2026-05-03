@@ -32,7 +32,6 @@ in
             enable = true;
             efiSupport = true;
             device = "nodev";
-            configurationLimit = 10;
             extraEntries = ''
               menuentry "System shutdown" {
                   echo "System shutting down..."
