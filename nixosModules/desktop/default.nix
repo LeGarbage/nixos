@@ -48,9 +48,14 @@ in
 
       hypridle.enable = true;
 
-      # For hyprpanel
+      # For wayle
       upower.enable = true;
+
+      # For nautilus
+      gvfs.enable = true;
     };
+
+    security.polkit.enable = true;
 
     systemd.user.services.hypridle.path = [ pkgs.brightnessctl ];
   };

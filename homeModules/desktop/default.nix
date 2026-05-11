@@ -18,10 +18,17 @@ in
       neovide
       wayle
       rofi
+      nautilus
+      mission-center
 
       # For Hyprland
       brightnessctl
+      hyprshutdown
     ];
+
+    services = {
+      hyprpolkitagent.enable = true;
+    };
 
     internal.desktop.wallpaper.enable = lib.mkDefault true;
   };
