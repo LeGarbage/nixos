@@ -121,20 +121,6 @@
     gnome.gnome-keyring.enable = true;
   };
 
-  systemd = {
-    packages = with pkgs; [ ghostty ];
-    user.services."app-com.mitchellh.ghostty".wantedBy = [ "graphical-session.target" ];
-  };
-
-  fonts = {
-    packages = with pkgs; [ nerd-fonts.commit-mono ];
-    fontconfig = {
-      defaultFonts.monospace = [ "CommitMonoNerdFont" ];
-      defaultFonts.sansSerif = [ "CommitMonoNerdFont" ];
-      defaultFonts.serif = [ "CommitMonoNerdFont" ];
-    };
-  };
-
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave

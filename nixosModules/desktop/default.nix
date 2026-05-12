@@ -24,7 +24,11 @@ in
     ];
 
     programs = {
-      hyprland.enable = true;
+      hyprland = {
+        enable = true;
+        withUWSM = true;
+      };
+
       hyprlock.enable = true;
 
       firefox.enable = true;
@@ -57,6 +61,12 @@ in
 
     security.polkit.enable = true;
 
-    systemd.user.services.hypridle.path = [ pkgs.brightnessctl ];
+    systemd = {
+      packages = with pkgs; [ ghostty ];
+      user.services."app-com.mitchellh.ghostty" = {
+        wantedBy = [ "graphical-session.target" ];
+        enableDefaultPath = false;
+      };
+    };
   };
 }

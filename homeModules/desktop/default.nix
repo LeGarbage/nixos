@@ -23,11 +23,11 @@ in
 
       # For Hyprland
       brightnessctl
-      hyprshutdown
     ];
 
     services = {
       hyprpolkitagent.enable = true;
+      hyprsunset.enable = true;
     };
 
     internal.desktop.wallpaper.enable = lib.mkDefault true;
