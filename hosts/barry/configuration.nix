@@ -46,6 +46,7 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      "radicale"
     ];
   };
 
@@ -80,13 +81,31 @@
     caddy = {
       enable = true;
 
-      virtualHosts = {
-        "${config.networking.hostName}.tadpole-escalator.ts.net:5233" = {
-          extraConfig = ''
-            reverse_proxy localhost:5232
-          '';
+      virtualHosts =
+        let
+          hostUrl = "${config.networking.hostName}.tadpole-escalator.ts.net";
+        in
+        {
+          # Tailscale DNS cannot create new subdomains
+          ${hostUrl} = {
+            extraConfig = /* caddy */ ''
+              redir /radicale /radicale/
+              handle /radicale/* {
+                uri strip_prefix /radicale
+                reverse_proxy localhost:5232 {
+                  header_up X-Script-Name /radicale
+                  header_up Authorization {header.Authorization}
+              }
+              }
+            '';
+          };
+          # Needed because the iOS calendar cannot handle calendars in subdirectories
+          "${hostUrl}:5233" = {
+            extraConfig = /* caddy */ ''
+              redir https://${hostUrl}/radicale/{uri} permanent
+            '';
+          };
         };
-      };
     };
 
     tailscale = {

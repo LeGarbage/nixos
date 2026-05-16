@@ -28,13 +28,14 @@
       enable = true;
       backups =
         let
+          pruneOpts = [
+            "--keep-daily 7"
+            "--keep-weekly 4"
+            "--keep-monthly 12"
+          ];
           obsidianPath = "${config.home.homeDirectory}/obsidian/main";
           obsidianOpts = {
-            pruneOpts = [
-              "--keep-daily 7"
-              "--keep-weekly 4"
-              "--keep-monthly 12"
-            ];
+            inherit pruneOpts;
             exclude = [
               ".stfolder"
               ".trash"
@@ -58,6 +59,18 @@
             passwordCommand = "${lib.getExe pkgs.pass} restic/obsidian-remote";
           }
           // obsidianOpts;
+          radicale-remote = {
+            inherit pruneOpts;
+            initialize = true;
+            repository = "rclone:drive:backups/radicale";
+            passwordCommand = "${lib.getExe pkgs.pass} restic/radicale-remote";
+            exclude = [
+              ".Radicale.cache"
+              ".Radicale.lock"
+              ".Radicale.tmp-*"
+            ];
+            paths = [ "/var/lib/radicale/collections" ];
+          };
         };
     };
 
@@ -121,8 +134,6 @@
     homeDirectory = "/home/logan";
 
     packages = with pkgs; [
-      starship
-      wrappedNeovim
       gcr
       # TODO: Configure with home manager once rclone's configuration gets fixed
       #       https://discourse.nixos.org/t/programs-modifying-config-files-created-by-home-manager/42878
