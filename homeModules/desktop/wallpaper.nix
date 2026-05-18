@@ -39,8 +39,6 @@ in
           youtubeSupport = false;
         };
       })
-      socat
-      jq
     ];
 
     programs.hyprshot = {
