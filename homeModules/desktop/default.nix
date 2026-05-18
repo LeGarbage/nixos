@@ -16,10 +16,15 @@ in
     home.packages = with pkgs; [
       ghostty
       neovide
-      wayle
       rofi
       nautilus
       mission-center
+      zed-editor
+      obsidian
+      spotify
+      vlc
+      gnome-calendar
+      errands
 
       # For Hyprland
       brightnessctl
@@ -28,7 +33,18 @@ in
     services = {
       hyprpolkitagent.enable = true;
       hyprsunset.enable = true;
+      wayle.enable = true;
     };
+
+    xdg.configFile."hypr/.luarc.json".text = /* json */ ''
+      {
+        "workspace": {
+          "library": [
+            "${pkgs.hyprland}/share/hypr/stubs"
+          ]
+        }
+      }
+    '';
 
     internal.desktop.wallpaper.enable = lib.mkDefault true;
   };

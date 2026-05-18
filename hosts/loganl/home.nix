@@ -46,10 +46,6 @@
           name = "default";
           isDefault = true;
         };
-        school = {
-          id = 1;
-          name = "school";
-        };
       };
     };
   };
@@ -133,15 +129,8 @@
     homeDirectory = "/home/logan";
 
     packages = with pkgs; [
-      vlc
-      starship
-      wrappedNeovim
       kdePackages.plasma-integration
       kdePackages.breeze
-      # vscode-fhs
-      zed-editor
-      obsidian
-      spotify
     ];
 
     # This value determines the Home Manager release that your configuration is

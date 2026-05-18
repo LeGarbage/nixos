@@ -46,6 +46,8 @@ in
 
     home.packages = with pkgs; [
       yazi
+      starship
+      wrappedNeovim
     ];
   };
 }
