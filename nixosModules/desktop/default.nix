@@ -21,6 +21,7 @@ in
 
     environment.systemPackages = with pkgs; [
       wl-clipboard
+      gnome-online-accounts-gtk
     ];
 
     programs = {
@@ -32,6 +33,9 @@ in
       hyprlock.enable = true;
 
       firefox.enable = true;
+
+      seahorse.enable = true;
+      dconf.enable = true;
     };
 
     services = {
@@ -57,6 +61,12 @@ in
 
       # For nautilus
       gvfs.enable = true;
+
+      gnome = {
+        gnome-keyring.enable = true;
+        evolution-data-server.enable = true;
+        gnome-online-accounts.enable = true;
+      };
     };
 
     security.polkit.enable = true;

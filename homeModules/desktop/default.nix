@@ -18,16 +18,19 @@ in
       neovide
       rofi
       nautilus
+      loupe
       mission-center
       zed-editor
       obsidian
       spotify
+      discord
       vlc
       gnome-calendar
-      errands
+      planify
 
       # For Hyprland
       brightnessctl
+      playerctl
     ];
 
     services = {
