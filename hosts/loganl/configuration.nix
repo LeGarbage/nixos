@@ -102,6 +102,8 @@
     };
 
     steam.enable = true;
+
+    nh.flake = "/home/logan/nixos";
   };
 
   services = {

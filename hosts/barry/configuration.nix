@@ -64,6 +64,10 @@
     pkgs.stow
   ];
 
+  programs = {
+    nh.flake = "/home/logan/nixos";
+  };
+
   services = {
     radicale = {
       enable = true;

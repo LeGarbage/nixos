@@ -8,39 +8,25 @@ let
 
   presets = {
     aggressive = {
-      nix = {
-        gc = {
-          automatic = true;
-          options = "--delete-older-than 7d";
-          dates = "daily";
-        };
-        settings.auto-optimise-store = true;
+      nix.settings.auto-optimise-store = true;
+      programs.nh.clean = {
+        enable = true;
+        extraArgs = "--keep 3 --keep-since 1w";
+        dates = "daily";
       };
     };
     normal = {
-      nix = {
-        gc = {
-          automatic = true;
-          options = "--delete-older-than 14d";
-          dates = "weekly";
-        };
-        optimise = {
-          automatic = true;
-          dates = "weekly";
-        };
+      programs.nh.clean = {
+        enable = true;
+        extraArgs = "--keep 6 --keep-since 2w --optimise";
+        dates = "weekly";
       };
     };
     minimal = {
-      nix = {
-        gc = {
-          automatic = true;
-          options = "--delete-older-than 28d";
-          dates = "weekly";
-        };
-        optimise = {
-          automatic = true;
-          dates = "weekly";
-        };
+      programs.nh.clean = {
+        enable = true;
+        extraArgs = "--keep 12 --keep-since 4w --optimise --no-gcroots";
+        dates = "weekly";
       };
     };
   };
@@ -71,6 +57,7 @@ in
           ];
         };
       };
+      programs.nh.enable = true;
     }
     (lib.mkIf (cfg.storeStrategy == "aggressive") presets.aggressive)
     (lib.mkIf (cfg.storeStrategy == "normal") presets.normal)
