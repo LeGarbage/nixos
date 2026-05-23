@@ -39,6 +39,8 @@ in
       wayle.enable = true;
     };
 
+    stylix.targets.gtksourceview.enable = false;
+
     xdg.configFile."hypr/.luarc.json".text = /* json */ ''
       {
         "workspace": {

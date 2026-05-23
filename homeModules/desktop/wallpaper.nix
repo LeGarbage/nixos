@@ -34,16 +34,11 @@ in
   };
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
-      (linux-wallpaperengine.override {
-        mpv = pkgs.mpv.override {
-          youtubeSupport = false;
-        };
-      })
+      linux-wallpaperengine
     ];
 
     programs.hyprshot = {
       enable = true;
-      # FIX: This env var is not set
       saveLocation = "$HOME/Pictures/Screenshots";
     };
 

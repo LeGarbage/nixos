@@ -28,8 +28,7 @@ in
 
       loader = {
         # Hide the OS choice for bootloaders.
-        # It's still possible to open the bootloader list by pressing any key
-        # It will just not appear on screen unless a key is pressed
+        # It's still possible to open the bootloader list by holding escape
         timeout = 0;
         grub.timeoutStyle = "hidden";
       };

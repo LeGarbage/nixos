@@ -29,6 +29,10 @@ in
       git.enable = true;
     };
 
+    security.sudo.extraConfig = ''
+      Defaults passwd_timeout=0
+    '';
+
     networking.networkmanager.enable = true;
 
     # Select internationalisation properties.
