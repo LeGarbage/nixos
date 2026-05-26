@@ -36,7 +36,15 @@
   time.timeZone = "America/Denver";
 
   hardware = {
-    bluetooth.enable = true;
+    bluetooth = {
+      enable = true;
+      powerOnBoot = false;
+      settings = {
+        General = {
+          Experimental = true;
+        };
+      };
+    };
     enableAllFirmware = true;
   };
 

@@ -34,9 +34,11 @@ in
     ];
 
     services = {
-      hyprpolkitagent.enable = true;
+      polkit-gnome.enable = true;
       hyprsunset.enable = true;
       wayle.enable = true;
+
+      mpris-proxy.enable = true;
     };
 
     stylix.targets.gtksourceview.enable = false;
