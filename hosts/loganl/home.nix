@@ -131,6 +131,8 @@
     packages = with pkgs; [
       kdePackages.plasma-integration
       kdePackages.breeze
+
+      prismlauncher
     ];
 
     # This value determines the Home Manager release that your configuration is
