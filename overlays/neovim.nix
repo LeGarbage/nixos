@@ -15,8 +15,6 @@ final: prev: {
         # Telescope-fzf-native
         gcc
         gnumake
-        # Snacks dashboard
-        fortune
         # Direnv.nvim
         direnv
         # render-markdown.nvim
