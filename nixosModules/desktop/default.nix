@@ -32,8 +32,6 @@ in
 
       hyprlock.enable = true;
 
-      firefox.enable = true;
-
       seahorse.enable = true;
       dconf.enable = true;
     };

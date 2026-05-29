@@ -35,21 +35,6 @@
     cliphist.enable = true;
   };
 
-  programs = {
-    firefox = {
-      enable = true;
-      configPath = "${config.xdg.configHome}/mozilla/firefox";
-      profiles = {
-        default = {
-          id = 0;
-          extensions.force = true;
-          name = "default";
-          isDefault = true;
-        };
-      };
-    };
-  };
-
   stylix = {
     icons = {
       enable = true;
