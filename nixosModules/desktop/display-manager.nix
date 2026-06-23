@@ -24,6 +24,9 @@ in
         "-m"
         "last"
       ];
+      settings = {
+        skip_selection = true;
+      };
     };
   };
 }
