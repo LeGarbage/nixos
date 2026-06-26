@@ -7,9 +7,7 @@ let
   cfg = config.internal.common;
 in
 {
-  imports = [
-    ./nix.nix
-  ];
+  imports = [ ];
   options = {
   };
   config = {

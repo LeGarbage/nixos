@@ -10,12 +10,6 @@
     inputs.self.homeModules.common
   ];
 
-  internal = {
-    common = {
-      nix.storeStrategy = "aggressive";
-    };
-  };
-
   programs = {
     password-store.enable = true;
     gpg.enable = true;

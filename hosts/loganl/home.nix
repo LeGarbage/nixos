@@ -23,9 +23,6 @@
         };
       };
     };
-    common = {
-      nix.storeStrategy = "normal";
-    };
   };
 
   services = {
