@@ -3,5 +3,4 @@ final: prev: {
     system = final.system;
   };
   rofi = prev.rofi.override { plugins = [ prev.rofi-calc ]; };
-  blesh = final.pkgsStable.blesh;
 }
