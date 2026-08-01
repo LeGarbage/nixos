@@ -27,6 +27,7 @@ in
       vlc
       gnome-calendar
       planify
+      trilium-desktop
 
       # For Hyprland
       brightnessctl

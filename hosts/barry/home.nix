@@ -27,32 +27,8 @@
             "--keep-weekly 4"
             "--keep-monthly 12"
           ];
-          obsidianPath = "${config.home.homeDirectory}/obsidian/main";
-          obsidianOpts = {
-            inherit pruneOpts;
-            exclude = [
-              ".stfolder"
-              ".trash"
-              ".direnv"
-              ".rumdl_cache"
-            ];
-            paths = [ obsidianPath ];
-            timerConfig = null;
-          };
         in
         {
-          obsidian-main-local = {
-            initialize = true;
-            repository = "/srv/backups/obsidian";
-            passwordCommand = "${lib.getExe pkgs.pass} restic/obsidian-local";
-          }
-          // obsidianOpts;
-          obsidian-main-remote = {
-            initialize = true;
-            repository = "rclone:drive:backups/obsidian";
-            passwordCommand = "${lib.getExe pkgs.pass} restic/obsidian-remote";
-          }
-          // obsidianOpts;
           radicale-remote = {
             inherit pruneOpts;
             initialize = true;
@@ -65,6 +41,12 @@
             ];
             paths = [ "/var/lib/radicale/collections" ];
           };
+          trilium-remote = {
+            inherit pruneOpts;
+            repository = "rclone:drive:backups/trilium";
+            passwordCommand = "${lib.getExe pkgs.pass} restic/trilium-remote";
+            paths = [ "/var/lib/trilium/backup/backup-daily.db" ];
+          };
         };
     };
 
@@ -72,51 +54,6 @@
       enable = true;
       pinentry = {
         package = pkgs.pinentry-gnome3;
-      };
-    };
-  };
-
-  systemd.user = {
-    services = {
-      syncthing.Install.WantedBy = [ "multi-user.target" ];
-
-      restic-backups-obsidian-main-format = {
-        Unit = {
-          Wants = [
-            "restic-backups-obsidian-main-local.service"
-            "restic-backups-obsidian-main-remote.service"
-          ];
-        };
-
-        Service = {
-          Type = "oneshot";
-
-          ExecStart = "${pkgs.nix}/bin/nix fmt";
-          WorkingDirectory = "${config.home.homeDirectory}/obsidian/main";
-        };
-      };
-
-      restic-backups-obsidian-main-local = {
-        Unit = {
-          After = [ "restic-backups-obsidian-main-format.service" ];
-        };
-      };
-
-      restic-backups-obsidian-main-remote = {
-        Unit = {
-          After = [ "restic-backups-obsidian-main-format.service" ];
-        };
-      };
-    };
-
-    timers = {
-      restic-backups-obsidian-main-format = {
-        Install.WantedBy = [ "timers.target" ];
-
-        Timer = {
-          OnCalendar = "daily";
-          Persistent = true;
-        };
       };
     };
   };
