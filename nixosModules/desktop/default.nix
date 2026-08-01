@@ -34,6 +34,8 @@ in
 
       seahorse.enable = true;
       dconf.enable = true;
+
+      localsend.enable = true;
     };
 
     services = {

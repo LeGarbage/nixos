@@ -53,8 +53,6 @@
     font = {
       name = "CommitMonoNerdFont";
     };
-
-    gtk4.theme = null;
   };
 
   xdg = {

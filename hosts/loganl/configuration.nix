@@ -68,6 +68,10 @@
       sansSerif = config.stylix.fonts.monospace;
       emoji = config.stylix.fonts.monospace;
     };
+    targets = {
+      # NOTE: Remove once https://github.com/nix-community/stylix/issues/2318 is fixed
+      gtksourceview.enable = false;
+    };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.

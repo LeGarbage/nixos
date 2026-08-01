@@ -97,6 +97,7 @@ in
               "privacy.globalprivacycontrol.enabled" = true;
               # Open previous tabs
               "browser.startup.page" = 3;
+              "browser.tabs.closeWindowWithLastTab" = false;
             };
             search = {
               force = true;
@@ -179,17 +180,31 @@ in
       mpris-proxy.enable = true;
     };
 
-    stylix.targets.gtksourceview.enable = false;
+    stylix.targets = {
+      gtksourceview.enable = false;
+      wayle.enable = false;
+    };
 
-    xdg.configFile."hypr/.luarc.json".text = /* json */ ''
-      {
-        "workspace": {
-          "library": [
-            "${pkgs.hyprland}/share/hypr/stubs"
-          ]
+    xdg.configFile = {
+      "hypr/.luarc.json".text = /* json */ ''
+        {
+          "workspace": {
+            "library": [
+              "${pkgs.hyprland}/share/hypr/stubs"
+            ]
+          }
         }
-      }
-    '';
+      '';
+      "hypr/nixos/plugins.lua".text = "";
+      # let
+      #   hyprspace = pkgs.hyprlandPlugins.hyprspace;
+      # in
+      # /* lua */ ''
+      #   hl.on("hyprland.start", function()
+      #     hl.exec_cmd("hyprctl plugin load ${hyprspace}/lib/lib${hyprspace.pname}.so")
+      #   end)
+      # '';
+    };
 
     internal.desktop.wallpaper.enable = lib.mkDefault true;
   };
