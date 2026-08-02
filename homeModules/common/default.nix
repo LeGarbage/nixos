@@ -1,15 +1,8 @@
 {
   pkgs,
-  config,
   ...
 }:
-let
-  cfg = config.internal.common;
-in
 {
-  imports = [ ];
-  options = {
-  };
   config = {
     programs = {
       git = {

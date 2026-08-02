@@ -8,7 +8,6 @@ let
   cfg = config.internal.common.boot;
 in
 {
-  imports = [ ];
   options = {
     internal.common.boot.blankTty = lib.mkOption {
       description = ''

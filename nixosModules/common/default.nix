@@ -1,18 +1,12 @@
 {
-  config,
   ...
 }:
-let
-  cfg = config.internal.common;
-in
 {
   imports = [
     ./boot.nix
     ./nix.nix
     ./tailscale.nix
   ];
-  options = {
-  };
   config = {
     programs = {
       nano.enable = false;

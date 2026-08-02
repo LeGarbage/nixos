@@ -1,14 +1,7 @@
 {
-  config,
-  pkgs,
   ...
 }:
-let
-  cfg = config.internal.desktop.displayManager;
-in
 {
-  imports = [ ];
-  options = { };
   config = {
     services = {
       greetd = {

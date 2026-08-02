@@ -7,18 +7,13 @@ let
   cfg = config.internal.common.tailscale;
 in
 {
-  imports = [ ];
   options = {
     internal.common.tailscale.exitNode.enable = lib.mkEnableOption "using this device as an exit node";
   };
   config = lib.mkMerge [
     {
-      services = {
-        tailscale.enable = true;
-      };
-
+      services.tailscale.enable = true;
       networking.nftables.enable = true;
-
       systemd.services.tailscaled.serviceConfig.Environment = [
         "TS_DEBUG_FIREWALL_MODE=nftables"
       ];

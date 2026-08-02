@@ -17,14 +17,7 @@
   ];
 
   internal = {
-    desktop = {
-      enable = true;
-      remapCapslock = true;
-    };
-    laptop.enable = true;
-    common = {
-      nix.storeStrategy = "normal";
-    };
+    common.nix.storeStrategy = "normal";
   };
 
   networking = {

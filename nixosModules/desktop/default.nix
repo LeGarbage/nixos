@@ -1,24 +1,13 @@
 {
-  config,
   pkgs,
-  lib,
   ...
 }:
-let
-  cfg = config.internal.desktop;
-in
 {
   imports = [
     ./boot-splash.nix
     ./display-manager.nix
   ];
-  options = {
-    internal.desktop.enable = lib.mkEnableOption "system desktop configuration";
-    internal.desktop.remapCapslock = lib.mkEnableOption "remap capslock with keyd to be esc on press and ctrl on hold";
-  };
-  config = lib.mkIf cfg.enable {
-    internal.desktop.bootSplash.enable = true;
-
+  config = {
     environment.systemPackages = with pkgs; [
       wl-clipboard
       gnome-online-accounts-gtk
@@ -39,7 +28,7 @@ in
     };
 
     services = {
-      keyd = lib.mkIf cfg.remapCapslock {
+      keyd = {
         enable = true;
         keyboards = {
           default = {

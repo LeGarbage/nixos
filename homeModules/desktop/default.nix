@@ -4,15 +4,9 @@
   config,
   ...
 }:
-let
-  cfg = config.internal.desktop;
-in
 {
   imports = [ ./wallpaper.nix ];
-  options = {
-    internal.desktop.enable = lib.mkEnableOption "user desktop configuration";
-  };
-  config = lib.mkIf cfg.enable {
+  config = {
     home.packages = with pkgs; [
       ghostty
       neovide
@@ -170,6 +164,11 @@ in
           };
         };
       };
+
+      hyprshot = {
+        enable = true;
+        saveLocation = "$HOME/Pictures/Screenshots";
+      };
     };
 
     services = {
@@ -205,7 +204,5 @@ in
       #   end)
       # '';
     };
-
-    internal.desktop.wallpaper.enable = lib.mkDefault true;
   };
 }

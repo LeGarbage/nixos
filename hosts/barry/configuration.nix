@@ -19,8 +19,6 @@
       nix.storeStrategy = "aggressive";
       tailscale.exitNode.enable = true;
     };
-
-    server.enable = true;
   };
 
   # Allow any user in the wheel group to import a remote configuration

@@ -12,17 +12,15 @@
   ];
 
   internal = {
-    desktop = {
-      enable = true;
-      wallpaper.wpaperd.settings = {
-        eDP-1 = {
-          path = pkgs.fetchurl {
-            url = "https://raw.githubusercontent.com/Narmis-E/onedark-wallpapers/6f084e27d7a407be5c73a9fc88a5644408b74dca/minimal/od_planets.png";
-            hash = "sha256-x9Btp5f+i5QAQPJHDGEJHcRDvBIKDmoG65DmlhTqoOQ=";
-          };
+    desktop.wallpaper.wpaperd.settings = {
+      eDP-1 = {
+        path = pkgs.fetchurl {
+          url = "https://raw.githubusercontent.com/Narmis-E/onedark-wallpapers/6f084e27d7a407be5c73a9fc88a5644408b74dca/minimal/od_planets.png";
+          hash = "sha256-x9Btp5f+i5QAQPJHDGEJHcRDvBIKDmoG65DmlhTqoOQ=";
         };
       };
     };
+
   };
 
   services = {

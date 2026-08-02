@@ -1,17 +1,8 @@
 {
-  config,
-  lib,
   ...
 }:
-let
-  cfg = config.internal.desktop;
-in
 {
-  imports = [ ];
-  options = {
-    internal.laptop.enable = lib.mkEnableOption "laptop config";
-  };
-  config = lib.mkIf cfg.enable {
+  config = {
     services = {
       logind = {
         settings.Login = {

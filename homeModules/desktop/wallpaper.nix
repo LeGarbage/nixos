@@ -9,8 +9,6 @@ let
 in
 {
   options = {
-    internal.desktop.wallpaper.enable = lib.mkEnableOption "wallpapers using linux-wallpaperengine and wpaperd";
-
     internal.desktop.wallpaper.wpaperd.settings = lib.mkOption {
       type = (pkgs.formats.toml { }).type;
       default = { };
@@ -32,15 +30,10 @@ in
       '';
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = {
     home.packages = with pkgs; [
       linux-wallpaperengine
     ];
-
-    programs.hyprshot = {
-      enable = true;
-      saveLocation = "$HOME/Pictures/Screenshots";
-    };
 
     services.wpaperd = {
       enable = true;
