@@ -6,11 +6,13 @@
   imports = [
     ./boot-splash.nix
     ./display-manager.nix
+    ./stylix.nix
   ];
   config = {
     environment.systemPackages = with pkgs; [
       wl-clipboard
       gnome-online-accounts-gtk
+      libreoffice
     ];
 
     programs = {
@@ -25,6 +27,8 @@
       dconf.enable = true;
 
       localsend.enable = true;
+
+      steam.enable = true;
     };
 
     services = {
@@ -67,5 +71,18 @@
         enableDefaultPath = false;
       };
     };
+
+    hardware = {
+      bluetooth = {
+        enable = true;
+        powerOnBoot = true;
+        settings = {
+          General = {
+            Experimental = true;
+          };
+        };
+      };
+    };
+
   };
 }

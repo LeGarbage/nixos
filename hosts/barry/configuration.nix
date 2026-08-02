@@ -32,10 +32,6 @@
   # Set your time zone.
   time.timeZone = "America/Denver";
 
-  hardware = {
-    enableAllFirmware = true;
-  };
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.logan = {
     isNormalUser = true;
@@ -60,10 +56,6 @@
       "logan" = import ./home.nix;
     };
   };
-
-  environment.systemPackages = [
-    pkgs.stow
-  ];
 
   programs = {
     nh.flake = "/home/logan/nixos";

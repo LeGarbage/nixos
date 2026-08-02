@@ -1,4 +1,5 @@
 {
+  pkgs,
   ...
 }:
 {
@@ -21,13 +22,31 @@
       };
 
       git.enable = true;
+
+      nix-ld = {
+        enable = true;
+        libraries = with pkgs; [
+          # Add any missing dynamic libraries for unpackaged programs
+          # here, NOT in environment.systemPackages
+          glibc
+        ];
+      };
+
     };
 
+    environment.systemPackages = with pkgs; [ stow ];
+
+    # Disable password timeout for sudo
     security.sudo.extraConfig = ''
       Defaults passwd_timeout=0
     '';
 
     networking.networkmanager.enable = true;
+
+    hardware = {
+      enableAllFirmware = true;
+      enableAllHardware = true;
+    };
 
     # Select internationalisation properties.
     i18n.defaultLocale = "en_US.UTF-8";
