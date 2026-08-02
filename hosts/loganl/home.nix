@@ -1,8 +1,6 @@
 {
   pkgs,
-  config,
   inputs,
-  lib,
   ...
 }:
 {
@@ -18,84 +16,6 @@
           url = "https://raw.githubusercontent.com/Narmis-E/onedark-wallpapers/6f084e27d7a407be5c73a9fc88a5644408b74dca/minimal/od_planets.png";
           hash = "sha256-x9Btp5f+i5QAQPJHDGEJHcRDvBIKDmoG65DmlhTqoOQ=";
         };
-      };
-    };
-
-  };
-
-  services = {
-    syncthing.enable = true;
-    kdeconnect.enable = true;
-
-    cliphist.enable = true;
-  };
-
-  stylix = {
-    icons = {
-      enable = true;
-      package = pkgs.papirus-icon-theme;
-      dark = "Papirus";
-      light = "Papirus";
-    };
-    targets = {
-      firefox = {
-        profileNames = [ "default" ];
-        colorTheme.enable = true;
-      };
-    };
-  };
-
-  gtk = {
-    enable = true;
-
-    font = {
-      name = "CommitMonoNerdFont";
-    };
-  };
-
-  xdg = {
-    # https://github.com/nix-community/stylix/issues/1958#issuecomment-3607824025
-    configFile.kdeglobals.source =
-      let
-        themePackage = builtins.head (
-          builtins.filter (
-            p: builtins.match ".*stylix-kde-theme.*" (builtins.baseNameOf p) != null
-          ) config.home.packages
-        );
-        colorSchemeSlug = lib.concatStrings (
-          lib.filter lib.isString (builtins.split "[^a-zA-Z]" config.lib.stylix.colors.scheme)
-        );
-      in
-      "${themePackage}/share/color-schemes/${colorSchemeSlug}.colors";
-
-    userDirs = {
-      enable = true;
-      setSessionVariables = false;
-      download = "${config.home.homeDirectory}/Downloads";
-      music = "${config.home.homeDirectory}/Music";
-      pictures = "${config.home.homeDirectory}/Pictures";
-      extraConfig = {
-        SCREENSHOTS = "${config.home.homeDirectory}/Pictures/Screenshots";
-      };
-    };
-
-    mimeApps = {
-      enable = true;
-      defaultApplications = {
-        "inode/directory" = "yazi.desktop";
-
-        "text/plain" = "neovide.desktop";
-        "text/x-script.python" = "neovide.desktop";
-        "application/x-shellscript" = "neovide.desktop";
-        "application/json" = "neovide.desktop";
-        "application/xml" = "neovide.desktop";
-        "text/xml" = "neovide.desktop";
-        "text/x-c" = "neovide.desktop";
-        "text/x-c++" = "neovide.desktop";
-        "text/x-java" = "neovide.desktop";
-        "text/x-rust" = "neovide.desktop";
-        "text/x-go" = "neovide.desktop";
-        "text/markdown" = "neovide.desktop";
       };
     };
   };
@@ -121,43 +41,5 @@
     # want to update the value, then make sure to first check the Home Manager
     # release notes.
     stateVersion = "25.05"; # Please read the comment before changing.
-
-    # The home.packages option allows you to install Nix packages into your
-    # environment.
-
-    # Home Manager is pretty good at managing dotfiles. The primary way to manage
-    # plain files is through 'home.file'.
-    file = {
-      # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-      # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-      # # symlink to the Nix store copy.
-      # ".screenrc".source = dotfiles/screenrc;
-
-      # # You can also set the file content immediately.
-      # ".gradle/gradle.properties".text = ''
-      #   org.gradle.console=verbose
-      #   org.gradle.daemon.idletimeout=3600000
-      # '';
-    };
-
-    # Home Manager can also manage your environment variables through
-    # 'home.sessionVariables'. These will be explicitly sourced when using a
-    # shell provided by Home Manager. If you don't want to manage your shell
-    # through Home Manager then you have to manually source 'hm-session-vars.sh'
-    # located at either
-    #
-    #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
-    #
-    # or
-    #
-    #  ~/.local/state/nix/profiles/profile/etc/profile.d/hm-session-vars.sh
-    #
-    # or
-    #
-    #  /etc/profiles/per-user/logan/etc/profile.d/hm-session-vars.sh
-    #
-    sessionVariables = {
-      # EDITOR = "emacs";
-    };
   };
 }
