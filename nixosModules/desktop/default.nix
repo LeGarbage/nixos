@@ -8,81 +8,79 @@
     ./display-manager.nix
     ./stylix.nix
   ];
-  config = {
-    environment.systemPackages = with pkgs; [
-      wl-clipboard
-      gnome-online-accounts-gtk
-      libreoffice
-    ];
 
-    programs = {
-      hyprland = {
-        enable = true;
-        withUWSM = true;
-      };
+  environment.systemPackages = with pkgs; [
+    wl-clipboard
+    gnome-online-accounts-gtk
+    libreoffice
+  ];
 
-      hyprlock.enable = true;
-
-      seahorse.enable = true;
-      dconf.enable = true;
-
-      localsend.enable = true;
-
-      steam.enable = true;
+  programs = {
+    hyprland = {
+      enable = true;
+      withUWSM = true;
     };
 
-    services = {
-      keyd = {
-        enable = true;
-        keyboards = {
-          default = {
-            ids = [ "*" ];
-            settings = {
-              main = {
-                # Maps capslock to escape when pressed and control when held
-                capslock = "overload(control, esc)";
-              };
+    hyprlock.enable = true;
+
+    seahorse.enable = true;
+    dconf.enable = true;
+
+    localsend.enable = true;
+
+    steam.enable = true;
+  };
+
+  services = {
+    keyd = {
+      enable = true;
+      keyboards = {
+        default = {
+          ids = [ "*" ];
+          settings = {
+            main = {
+              # Maps capslock to escape when pressed and control when held
+              capslock = "overload(control, esc)";
             };
           };
         };
       };
-
-      hypridle.enable = true;
-
-      # For wayle
-      upower.enable = true;
-
-      # For nautilus
-      gvfs.enable = true;
-
-      gnome = {
-        gnome-keyring.enable = true;
-        evolution-data-server.enable = true;
-        gnome-online-accounts.enable = true;
-      };
     };
 
-    security.polkit.enable = true;
+    hypridle.enable = true;
 
-    systemd = {
-      packages = with pkgs; [ ghostty ];
-      user.services."app-com.mitchellh.ghostty" = {
-        wantedBy = [ "graphical-session.target" ];
-        enableDefaultPath = false;
-      };
+    # For wayle
+    upower.enable = true;
+
+    # For nautilus
+    gvfs.enable = true;
+
+    gnome = {
+      gnome-keyring.enable = true;
+      evolution-data-server.enable = true;
+      gnome-online-accounts.enable = true;
     };
+  };
 
-    hardware = {
-      bluetooth = {
-        enable = true;
-        powerOnBoot = true;
-        settings = {
-          General = {
-            Experimental = true;
-          };
+  security.polkit.enable = true;
+
+  systemd = {
+    packages = with pkgs; [ ghostty ];
+    user.services."app-com.mitchellh.ghostty" = {
+      wantedBy = [ "graphical-session.target" ];
+      enableDefaultPath = false;
+    };
+  };
+
+  hardware = {
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+      settings = {
+        General = {
+          Experimental = true;
         };
       };
     };
-
   };
 }

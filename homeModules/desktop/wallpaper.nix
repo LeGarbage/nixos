@@ -30,6 +30,7 @@ in
       '';
     };
   };
+
   config = {
     home.packages = with pkgs; [
       linux-wallpaperengine

@@ -2,20 +2,18 @@
   ...
 }:
 {
-  config = {
-    services = {
-      openssh = {
-        enable = true;
+  services = {
+    openssh = {
+      enable = true;
 
-        settings = {
-          PasswordAuthentication = false;
-          ChallengeResponseAuthentication = false;
-          KbdInteractiveAuthentication = false;
-          PermitRootLogin = "no";
-        };
+      settings = {
+        PasswordAuthentication = false;
+        ChallengeResponseAuthentication = false;
+        KbdInteractiveAuthentication = false;
+        PermitRootLogin = "no";
       };
-
-      # fail2ban.enable = true;
     };
+
+    # fail2ban.enable = true;
   };
 }

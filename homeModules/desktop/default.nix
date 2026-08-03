@@ -9,80 +9,78 @@
     ./firefox.nix
     ./xdg.nix
   ];
-  config = {
-    home.packages = with pkgs; [
-      ghostty
-      neovide
-      rofi
-      nautilus
-      loupe
-      mission-center
-      zed-editor
-      obsidian
-      spotify
-      discord
-      vlc
-      gnome-calendar
-      planify
-      trilium-desktop
 
-      # For Hyprland
-      brightnessctl
-      playerctl
-    ];
+  home.packages = with pkgs; [
+    ghostty
+    neovide
+    rofi
+    nautilus
+    loupe
+    zed-editor
+    obsidian
+    spotify
+    discord
+    vlc
+    gnome-calendar
+    planify
+    trilium-desktop
 
-    programs = {
-      hyprshot = {
-        enable = true;
-        saveLocation = "$HOME/Pictures/Screenshots";
-      };
-    };
+    # For Hyprland
+    brightnessctl
+    playerctl
+  ];
 
-    services = {
-      polkit-gnome.enable = true;
-      hyprsunset.enable = true;
-      wayle.enable = true;
-
-      mpris-proxy.enable = true;
-
-      syncthing.enable = true;
-      kdeconnect.enable = true;
-
-      cliphist.enable = true;
-    };
-
-    stylix.targets = {
-      gtksourceview.enable = false;
-      wayle.enable = false;
-    };
-
-    gtk = {
+  programs = {
+    hyprshot = {
       enable = true;
-
-      font = {
-        name = "CommitMonoNerdFont";
-      };
+      saveLocation = "$HOME/Pictures/Screenshots";
     };
+  };
 
-    xdg.configFile = {
-      "hypr/.luarc.json".text = /* json */ ''
-        {
-          "workspace": {
-            "library": [
-              "${pkgs.hyprland}/share/hypr/stubs"
-            ]
-          }
+  services = {
+    polkit-gnome.enable = true;
+    hyprsunset.enable = true;
+    wayle.enable = true;
+
+    mpris-proxy.enable = true;
+
+    syncthing.enable = true;
+    kdeconnect.enable = true;
+
+    cliphist.enable = true;
+  };
+
+  stylix.targets = {
+    gtksourceview.enable = false;
+    wayle.enable = false;
+  };
+
+  gtk = {
+    enable = true;
+
+    font = {
+      name = "CommitMonoNerdFont";
+    };
+  };
+
+  xdg.configFile = {
+    "hypr/.luarc.json".text = /* json */ ''
+      {
+        "workspace": {
+          "library": [
+            "${pkgs.hyprland}/share/hypr/stubs"
+          ]
         }
-      '';
-      "hypr/nixos/plugins.lua".text = "";
-      # let
-      #   hyprspace = pkgs.hyprlandPlugins.hyprspace;
-      # in
-      # /* lua */ ''
-      #   hl.on("hyprland.start", function()
-      #     hl.exec_cmd("hyprctl plugin load ${hyprspace}/lib/lib${hyprspace.pname}.so")
-      #   end)
-      # '';
-    };
+      }
+    '';
+    "hypr/nixos/plugins.lua".text = "";
+    # let
+    #   hyprspace = pkgs.hyprlandPlugins.hyprspace;
+    # in
+    # /* lua */ ''
+    #   hl.on("hyprland.start", function()
+    #     hl.exec_cmd("hyprctl plugin load ${hyprspace}/lib/lib${hyprspace.pname}.so")
+    #   end)
+    # '';
   };
 }
