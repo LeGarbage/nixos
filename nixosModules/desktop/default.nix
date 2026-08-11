@@ -7,6 +7,7 @@
     ./boot-splash.nix
     ./display-manager.nix
     ./stylix.nix
+    ./mission-center.nix
   ];
 
   environment.systemPackages = with pkgs; [
