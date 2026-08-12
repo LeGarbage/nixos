@@ -12,7 +12,10 @@ in
   };
   config = lib.mkMerge [
     {
-      services.tailscale.enable = true;
+      services.tailscale = {
+        enable = true;
+        extraSetFlags = [ "--operator=logan" ];
+      };
       networking.nftables.enable = true;
       systemd.services.tailscaled.serviceConfig.Environment = [
         "TS_DEBUG_FIREWALL_MODE=nftables"
@@ -21,6 +24,7 @@ in
     (lib.mkIf cfg.exitNode.enable {
       boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
       boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
+      services.tailscale.extraSetFlags = [ "--advertise-exit-node" ];
     })
   ];
 }
