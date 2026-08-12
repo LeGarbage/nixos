@@ -22,11 +22,10 @@
     userDirs = {
       enable = true;
       setSessionVariables = false;
-      download = "${config.home.homeDirectory}/Downloads";
-      music = "${config.home.homeDirectory}/Music";
-      pictures = "${config.home.homeDirectory}/Pictures";
+      createDirectories = true;
+      projects = "${config.home.homeDirectory}/projects";
       extraConfig = {
-        SCREENSHOTS = "${config.home.homeDirectory}/Pictures/Screenshots";
+        SCREENSHOTS = "${config.xdg.userDirs.pictures}/Screenshots";
       };
     };
 
