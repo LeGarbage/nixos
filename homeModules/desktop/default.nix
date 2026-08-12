@@ -16,6 +16,7 @@
     rofi
     nautilus
     loupe
+    dconf-editor
     zed-editor
     obsidian
     spotify

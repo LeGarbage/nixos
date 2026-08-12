@@ -26,6 +26,7 @@
 
     seahorse.enable = true;
     dconf.enable = true;
+    gnome-disks.enable = true;
 
     localsend.enable = true;
 
