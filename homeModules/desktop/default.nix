@@ -8,6 +8,7 @@
     ./stylix.nix
     ./firefox.nix
     ./xdg.nix
+    ./dconf.nix
   ];
 
   home.packages = with pkgs; [
