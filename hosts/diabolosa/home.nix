@@ -10,7 +10,7 @@
   ];
 
   internal = {
-    desktop.wallpaper.wpaperd.settings = pkgs.fetchurl {
+    desktop.wallpaper.defaultPath = pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/Narmis-E/onedark-wallpapers/6f084e27d7a407be5c73a9fc88a5644408b74dca/minimal/od_gargantua.png";
       hash = "sha256-DhsHDfIBC5R9SZx28iuwqwhl0U3dpGYJYrpzByY4HPM=";
     };
