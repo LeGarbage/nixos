@@ -8,7 +8,7 @@ with lib.hm.gvariant;
     "io/github/alainm23/planify" = {
       appearance = "Dark";
       automatic-reminders-enabled = true;
-      calendar-enabled = false;
+      calendar-enabled = true;
       dark-mode = true;
       home-view = "scheduled";
       labels-show-active-only = false;
