@@ -40,10 +40,6 @@
     extraGroups = [
       "networkmanager"
       "wheel"
-      # Allow the user to make backups of radicale
-      "radicale"
-      # Allow the user to make backups of trilium
-      "trilium"
     ];
   };
 
@@ -56,6 +52,10 @@
       "logan" = import ./home.nix;
     };
   };
+
+  environment.systemPackages = with pkgs; [
+    rclone
+  ];
 
   programs = {
     nh.flake = "/home/logan/nixos";
@@ -108,6 +108,39 @@
       # Needed for caddy to get TLS certs
       permitCertUid = "caddy";
     };
+
+    restic = {
+      backups =
+        let
+          pruneOpts = [
+            "--keep-daily 7"
+            "--keep-weekly 4"
+            "--keep-monthly 12"
+          ];
+        in
+        {
+          radicale-remote = {
+            inherit pruneOpts;
+            initialize = true;
+            repository = "rclone:drive:backups/radicale";
+            passwordFile = "/etc/nixos/passwords/restic-radicale-remote.txt";
+            exclude = [
+              ".Radicale.cache"
+              ".Radicale.lock"
+              ".Radicale.tmp-*"
+            ];
+            paths = [ "/var/lib/radicale/collections" ];
+          };
+          trilium-remote = {
+            inherit pruneOpts;
+            initialize = true;
+            repository = "rclone:drive:backups/trilium";
+            passwordFile = "/etc/nixos/passwords/restic-trilium-remote.txt";
+            paths = [ "/var/lib/trilium/backup/backup-daily.db" ];
+          };
+        };
+    };
+
   };
 
   systemd.services = {
