@@ -68,9 +68,12 @@
 
   systemd = {
     packages = with pkgs; [ ghostty ];
-    user.services."app-com.mitchellh.ghostty" = {
-      wantedBy = [ "graphical-session.target" ];
-      enableDefaultPath = false;
+    user.services = {
+      "app-com.mitchellh.ghostty" = {
+        wantedBy = [ "graphical-session.target" ];
+        enableDefaultPath = false;
+      };
+      hypridle.path = [ pkgs.brightnessctl ];
     };
   };
 
