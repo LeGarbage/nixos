@@ -33,6 +33,11 @@
   ];
 
   programs = {
+    eclipse = {
+      enable = true;
+      package = pkgs.eclipses.eclipse-java;
+    };
+
     hyprshot = {
       enable = true;
       saveLocation = "$HOME/Pictures/Screenshots";
