@@ -20,7 +20,7 @@
   };
 
   networking = {
-    hostName = "loganl"; # Define your hostname.
+    hostName = "thermae"; # Define your hostname.
     firewall.enable = false;
   };
 
