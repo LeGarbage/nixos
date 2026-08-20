@@ -59,6 +59,7 @@
 
   services = {
     ratbagd.enable = true;
+    fprintd.enable = true;
   };
 
   # This value determines the NixOS release from which the default
