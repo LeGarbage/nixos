@@ -63,6 +63,10 @@
   services = {
     ratbagd.enable = true;
     fprintd.enable = true;
+    tlp.settings = {
+      START_CHARGE_THRESH_BAT0 = 86;
+      STOP_CHARGE_THRESH_BAT0 = 90;
+    };
   };
 
   # This value determines the NixOS release from which the default
