@@ -24,6 +24,9 @@
     firewall.enable = false;
   };
 
+  # Password is required on login to unlock keyring
+  security.pam.services.login.fprintAuth = false;
+
   # Set your time zone.
   time.timeZone = "America/Denver";
 
