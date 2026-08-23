@@ -19,7 +19,6 @@
     loupe
     dconf-editor
     zed-editor
-    obsidian
     spotify
     discord
     vlc
