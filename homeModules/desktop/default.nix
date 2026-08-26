@@ -61,13 +61,7 @@
     wayle.enable = false;
   };
 
-  gtk = {
-    enable = true;
-
-    font = {
-      name = "CommitMonoNerdFont";
-    };
-  };
+  gtk.enable = true;
 
   xdg.configFile = {
     "hypr/.luarc.json".text = /* json */ ''

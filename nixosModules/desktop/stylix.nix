@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   ...
 }:
@@ -20,9 +19,14 @@
         package = pkgs.nerd-fonts.commit-mono;
         name = "CommitMonoNerdFont";
       };
-      serif = config.stylix.fonts.monospace;
-      sansSerif = config.stylix.fonts.monospace;
-      emoji = config.stylix.fonts.monospace;
+      serif = {
+        package = pkgs.source-serif;
+        name = "Source Serif 4";
+      };
+      sansSerif = {
+        package = pkgs.source-sans;
+        name = "Source Sans 3";
+      };
     };
     targets = {
       # NOTE: Remove once https://github.com/nix-community/stylix/issues/2318 is fixed
